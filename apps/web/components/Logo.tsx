@@ -5,7 +5,7 @@ const Logo = () => {
   return (
     <Link
       href="/"
-      className="flex z-40 font-semibold lg:text-2xl md:text-lg text-base"
+      className="flex z-40 font-semibold lg:text-2xl md:text-xl text-lg"
     >
       case<span className="text-green-600">cobra</span>
     </Link>
