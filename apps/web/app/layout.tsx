@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Recursive } from "next/font/google";
 import "./globals.css";
 
+const recursive = Recursive({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
-      </body>
+      <body className={recursive.className}>{children}</body>
     </html>
   );
 }
