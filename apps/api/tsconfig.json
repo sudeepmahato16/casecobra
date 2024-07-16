@@ -1,0 +1,9 @@
+{
+  "extends": "@repo/typescript-config/expressjs.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "outDir": "./build"
+  }
+}
