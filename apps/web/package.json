@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@casecobra/ui": "workspace:*",
+    "framer-motion": "^11.3.2",
     "lucide-react": "^0.408.0",
     "next": "14.2.5",
     "react": "18.3.1",

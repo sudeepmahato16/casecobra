@@ -1,8 +1,10 @@
 import React from "react";
 import { Check, Star } from "lucide-react";
+import Image from "next/image";
+
+import Reviews from "./Reviews";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { Icons } from "@/components/Icons";
-import Image from "next/image";
 
 const Proposition = () => {
   return (
@@ -106,6 +108,10 @@ const Proposition = () => {
           </div>
         </div>
       </MaxWidthWrapper>
+
+      <div className="pt-16">
+        <Reviews />
+      </div>
     </section>
   );
 };
