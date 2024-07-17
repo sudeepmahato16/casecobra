@@ -1,12 +1,11 @@
 import app from "@/app";
 import { config } from "dotenv";
+import { PORT } from "./config";
 
 config({
   path: "./.env",
 });
 
-const port = process.env.PORT || 8080;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}....`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}....`);
 });
