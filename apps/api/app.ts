@@ -1,4 +1,6 @@
 import express, { Express, urlencoded } from "express";
+import cookieParser from "cookie-parser";
+
 import { authRouter } from "./routes/authRouter";
 import globalErrorHandler from "./controller/errorController";
 import AppError from "./utils/appError";
@@ -17,6 +19,8 @@ app.use(
     extended: true,
   })
 );
+
+app.use(cookieParser());
 
 app.get("/", (req, res, next) => {
   res.send("hello!");

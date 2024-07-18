@@ -1,3 +1,4 @@
+import { Response } from "express";
 import * as bcrypt from "bcrypt";
 import crypto from "crypto";
 import { ObjectId } from "bson";
@@ -6,6 +7,7 @@ import { db } from "@casecobra/db";
 import Email from "@/services/email";
 import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";
+import AuthManager from "@/utils/authManager";
 import { EMAIL_ACTIVATION_TOKEN_EXPIRES_IN } from "@/config";
 
 const createHashToken = (token: string) => {
@@ -22,7 +24,7 @@ const createEmailVerificationToken = () => {
   };
 };
 
-export const verifyEmailVerificationToken = async (token: string) => {
+export const checkEmailVerificationToken = async (token: string) => {
   try {
     const hashToken = createHashToken(token);
     const user = await db.user.findFirst({
@@ -57,7 +59,9 @@ export const signUp = catchAsync(async (req, res, next) => {
     const id = new ObjectId().toString();
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const { token, hashToken } = createEmailVerificationToken();
+
     const verificationTokenExpiresIn = new Date(
       Date.now() + Number(EMAIL_ACTIVATION_TOKEN_EXPIRES_IN)
     );
@@ -80,7 +84,7 @@ export const signUp = catchAsync(async (req, res, next) => {
       url,
     }).sendEmailActivationMail();
 
-    res.status(200).json({
+    res.status(201).json({
       status: "success",
       message: "Please verified your email address",
     });
@@ -90,6 +94,28 @@ export const signUp = catchAsync(async (req, res, next) => {
   }
 });
 
+export const signIn = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await db.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user || (user && !(await bcrypt.compare(password, user.password)))) {
+    return next(new AppError("Incorrect email or password!", 401));
+  }
+
+  if (!user.isVerified) {
+    return next(new AppError("Please verified your email address", 401));
+  }
+
+  new AuthManager(res)
+    .createTokenAndCookie(user.id)
+    .sendResponse(200, { id: user.id, email: user.email, name: user.name });
+});
+
 export const verifyUser = catchAsync(async (req, res, next) => {
   const { token } = req.query;
 
@@ -97,7 +123,7 @@ export const verifyUser = catchAsync(async (req, res, next) => {
     return next(new AppError("token not found!", 404));
 
   try {
-    const user = await verifyEmailVerificationToken(token);
+    const user = await checkEmailVerificationToken(token);
 
     await db.user.update({
       where: {
@@ -110,10 +136,9 @@ export const verifyUser = catchAsync(async (req, res, next) => {
       },
     });
 
-    res.status(200).json({
-      status: "success",
-      message: "user verified",
-    });
+    new AuthManager(res)
+      .createTokenAndCookie(user.id)
+      .redirect("http://localhost:8080");
   } catch (error: any) {
     next(new AppError(error.message, 400));
   }
