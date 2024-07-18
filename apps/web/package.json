@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@casecobra/ui": "workspace:*",
+    "@hookform/resolvers": "^3.9.0",
     "framer-motion": "^11.3.2",
     "lucide-react": "^0.408.0",
     "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "tailwindcss-animate": "^1.0.7"
+    "react-hook-form": "^7.52.1",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
