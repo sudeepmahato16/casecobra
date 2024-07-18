@@ -24,20 +24,21 @@ const sendErrorProd = (error: any, _req: Request, res: Response) => {
   });
 };
 
-const globalErrorHandler = (
+const globalErrorHandler = async (
   err: any,
   req: Request,
   res: Response,
-  _next: NextFunction
+  next: NextFunction
 ) => {
   err.status = err.status || "error";
   err.statusCode = err.statusCode || 500;
 
-  if (process.env.NODE_ENV === "development") {
-    sendErrorDev(err, req, res);
-  } else if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production") {
     sendErrorProd(err, req, res);
+    return;
   }
+
+  sendErrorDev(err, req, res);
 };
 
 export default globalErrorHandler;
