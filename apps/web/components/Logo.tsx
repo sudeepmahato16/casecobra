@@ -1,11 +1,19 @@
-import React from "react";
+import React, { FC } from "react";
 import Link from "next/link";
+import { cn } from "@casecobra/ui";
 
-const Logo = () => {
+interface LogoProps {
+  className?: string;
+}
+
+const Logo: FC<LogoProps> = ({ className }) => {
   return (
     <Link
       href="/"
-      className="flex z-40 font-semibold lg:text-2xl md:text-xl text-lg"
+      className={cn(
+        "flex z-40 font-semibold lg:text-2xl md:text-xl text-lg",
+        className
+      )}
     >
       case<span className="text-green-600">cobra</span>
     </Link>
