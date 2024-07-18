@@ -8,10 +8,38 @@ import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";
 import { EMAIL_ACTIVATION_TOKEN_EXPIRES_IN } from "@/config";
 
-const createEmailActivationToken = (id: string) => {
-  const token = crypto.randomBytes(32).toString("hex");
-
+const createHashToken = (token: string) => {
   return crypto.createHash("sha256").update(token).digest("hex");
+};
+
+const createEmailVerificationToken = () => {
+  const token = crypto.randomBytes(32).toString("hex");
+  const hashToken = createHashToken(token);
+
+  return {
+    token,
+    hashToken,
+  };
+};
+
+export const verifyEmailVerificationToken = async (token: string) => {
+  try {
+    const hashToken = createHashToken(token);
+    const user = await db.user.findFirst({
+      where: {
+        verificationToken: hashToken,
+        verificationTokenExpiresIn: {
+          gt: new Date(Date.now()),
+        },
+      },
+    });
+
+    if (!user) throw new Error("Token is invalid or has expired");
+
+    return user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
 };
 
 export const signUp = catchAsync(async (req, res, next) => {
@@ -29,7 +57,7 @@ export const signUp = catchAsync(async (req, res, next) => {
     const id = new ObjectId().toString();
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const verificationToken = createEmailActivationToken(id);
+    const { token, hashToken } = createEmailVerificationToken();
     const verificationTokenExpiresIn = new Date(
       Date.now() + Number(EMAIL_ACTIVATION_TOKEN_EXPIRES_IN)
     );
@@ -40,11 +68,13 @@ export const signUp = catchAsync(async (req, res, next) => {
         email,
         password: hashedPassword,
         name,
-        verificationToken,
+        verificationToken: hashToken,
         verificationTokenExpiresIn,
       },
     });
-    const url = `${req.protocol}://${req.get("host")}/api/v1/auth/activate?token=${verificationToken}`;
+
+    const url = `${req.protocol}://${req.get("host")}/api/v1/auth/verify?token=${token}`;
+
     await new Email({
       user: { email, name },
       url,
@@ -57,5 +87,34 @@ export const signUp = catchAsync(async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(new AppError("Failed to create account", 500));
+  }
+});
+
+export const verifyUser = catchAsync(async (req, res, next) => {
+  const { token } = req.query;
+
+  if (!token || typeof token !== "string")
+    return next(new AppError("token not found!", 404));
+
+  try {
+    const user = await verifyEmailVerificationToken(token);
+
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        isVerified: true,
+        verificationToken: null,
+        verificationTokenExpiresIn: null,
+      },
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "user verified",
+    });
+  } catch (error: any) {
+    next(new AppError(error.message, 400));
   }
 });
