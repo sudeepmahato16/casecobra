@@ -43,6 +43,6 @@ export const isAuthenticated = async (
 
     next();
   } catch (error: any) {
-    next(new AppError(error.message, 401));
+    next(new AppError("Token is invalid or has expired", 401));
   }
 };

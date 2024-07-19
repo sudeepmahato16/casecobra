@@ -143,3 +143,19 @@ export const verifyUser = catchAsync(async (req, res, next) => {
     next(new AppError(error.message, 400));
   }
 });
+
+export const signOut = catchAsync(async (req, res, next) => {
+  res.cookie("casecobra-access-token", "signout", {
+    httpOnly: true,
+    expires: new Date(Date.now() + 10 * 5000),
+  });
+
+  res.cookie("casecobra-refresh-token", "signout", {
+    httpOnly: true,
+    expires: new Date(Date.now() + 10 * 5000),
+  });
+
+  res.status(200).json({
+    status: "success",
+  });
+});
