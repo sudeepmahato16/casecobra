@@ -2,11 +2,12 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@casecobra/ui";
 
-import MaxWidthWrapper from "./MaxWidthWrapper";
 import Logo from "./Logo";
+import MaxWidthWrapper from "./MaxWidthWrapper";
+import { getCurrentUser } from "@/services/user";
 
 const Navbar = async () => {
-  const user = false;
+  const user = await getCurrentUser();
   const isAdmin = false;
 
   return (

@@ -28,17 +28,21 @@ export const isAuthenticated = async (
       new AppError("You are not logged in. please log in to get access.", 401)
     );
 
-  const data = verifyToken(token);
+  try {
+    const data = verifyToken(token);
 
-  if (!data.id) {
-    return next(
-      new AppError("You are not logged in. please log in to get access.", 401)
-    );
+    if (!data.id) {
+      return next(
+        new AppError("You are not logged in. please log in to get access.", 401)
+      );
+    }
+
+    req.user = {
+      id: data.id,
+    };
+
+    next();
+  } catch (error: any) {
+    next(new AppError(error.message, 401));
   }
-
-  req.user = {
-    id: data.id,
-  };
-
-  next();
 };
