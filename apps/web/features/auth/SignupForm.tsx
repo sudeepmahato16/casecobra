@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
+import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Input, Label } from "@casecobra/ui";
 import FormItem from "./FormItem";
 import { SignUpFormData, SignUpSchema } from "@/types";
+import { signUp } from "@/services/auth";
 
 const SignupForm = () => {
   const {
@@ -21,9 +22,12 @@ const SignupForm = () => {
     },
   });
 
+  const [isLoading, startTransition] = useTransition();
+
   const onSubmit = (data: SignUpFormData) => {
-    const { email, name, password } = data;
-    console.log(email, name, password);
+    startTransition(async () => {
+      await signUp(data);
+    });
   };
 
   return (
@@ -64,7 +68,7 @@ const SignupForm = () => {
         />
       </FormItem>
 
-      <Button type="submit" size="lg" className="mt-4">
+      <Button type="submit" size="lg" className="mt-4" isLoading={isLoading}>
         Continue
       </Button>
     </form>

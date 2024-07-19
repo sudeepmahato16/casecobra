@@ -66,7 +66,7 @@ class Email {
       }
     );
 
-    this.send("Activate your account", html);
+    await this.send("Activate your account", html);
   }
 }
 
