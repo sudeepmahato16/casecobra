@@ -43,6 +43,7 @@ const SignupForm = () => {
           {...register("name", {
             required: true,
           })}
+          autoFocus
         />
       </FormItem>
 
