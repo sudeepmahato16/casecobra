@@ -3,8 +3,19 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import { authRouter } from "./routes/authRouter";
+import { userRouter } from "./routes/userRouter";
 import globalErrorHandler from "./controller/errorController";
 import AppError from "./utils/appError";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+      };
+    }
+  }
+}
 
 const app: Express = express();
 
@@ -37,6 +48,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 
 app.all("*", (req, _res, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));
