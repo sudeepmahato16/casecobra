@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { redirect } from "next/navigation";
-import { Button } from "@casecobra/ui";
 import Image from "next/image";
+import { Button } from "@casecobra/ui";
 
 interface VerifyEmailPageProps {
   searchParams: {
