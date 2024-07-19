@@ -52,3 +52,10 @@ export const signIn = async (formData: SignInFormData) => {
   revalidatePath("/");
   redirect("/");
 };
+
+export const signOut = () => {
+  const cookie = cookies();
+
+  cookie.delete("casecobra-access-token");
+  cookie.delete("casecobra-refresh-token");
+};
