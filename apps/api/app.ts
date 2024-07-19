@@ -6,6 +6,7 @@ import { authRouter } from "./routes/authRouter";
 import { userRouter } from "./routes/userRouter";
 import globalErrorHandler from "./controller/errorController";
 import AppError from "./utils/appError";
+import { initEdgeStore } from "./services/edgestore";
 
 declare global {
   namespace Express {
@@ -46,6 +47,8 @@ app.options("*", cors());
 app.get("/", (req, res, next) => {
   res.send("hello!");
 });
+
+initEdgeStore(app);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);

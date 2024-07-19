@@ -8,7 +8,10 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "baseUrl": ".",
+    "declaration": false,
+    "declarationMap": false
   },
 
   "include": [

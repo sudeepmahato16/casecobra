@@ -12,6 +12,8 @@ const UploadImage = () => {
 
   const isUploading = false;
 
+  const onDropAccepted = async (acceptedFiles: File[]) => {};
+
   return (
     <div
       className={cn(
@@ -30,6 +32,7 @@ const UploadImage = () => {
           }}
           onDragEnter={() => setIsDragOver(true)}
           onDragLeave={() => setIsDragOver(false)}
+          onDropAccepted={onDropAccepted}
         >
           {({ getRootProps, getInputProps }) => (
             <div
