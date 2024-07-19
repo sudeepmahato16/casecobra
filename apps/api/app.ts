@@ -1,5 +1,6 @@
 import express, { Express, urlencoded } from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import { authRouter } from "./routes/authRouter";
 import globalErrorHandler from "./controller/errorController";
@@ -21,6 +22,15 @@ app.use(
 );
 
 app.use(cookieParser());
+
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
+
+app.options("*", cors());
 
 app.get("/", (req, res, next) => {
   res.send("hello!");
