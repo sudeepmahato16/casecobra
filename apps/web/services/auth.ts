@@ -58,4 +58,6 @@ export const signOut = () => {
 
   cookie.delete("casecobra-access-token");
   cookie.delete("casecobra-refresh-token");
+
+  redirect("/");
 };

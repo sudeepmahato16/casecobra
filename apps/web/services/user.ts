@@ -1,9 +1,8 @@
 "use server";
-import { cache } from "react";
 import { cookies } from "next/headers";
 import axios from "@/utils/axios";
 
-export const getCurrentUser = cache(async () => {
+export const getCurrentUser = async () => {
   try {
     const accessToken = cookies().get("casecobra-access-token");
 
@@ -17,4 +16,4 @@ export const getCurrentUser = cache(async () => {
   } catch (error) {
     return null;
   }
-});
+};
