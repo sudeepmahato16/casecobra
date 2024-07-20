@@ -1,26 +1,8 @@
-import Joi, { ObjectSchema } from "joi";
-
-const authSignup = Joi.object().keys({
-  name: Joi.string().required().messages({
-    "any.required": "please provide your name!",
-    "string.empty": "please provide your name!",
-  }),
-  email: Joi.string().email().required().messages({
-    "any.required": "please provide your email address!",
-    "string.email": "please provide valid email address!",
-  }),
-  password: Joi.string().min(8).required().messages({
-    "any.required": "please provide a password!",
-    "string.min": "password must have minimum 8 characters",
-  }),
-});
-
-const authSignin = Joi.object().keys({
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-});
+import { ObjectSchema } from "joi";
+import { authSchema } from "./auth";
 
 export default {
-  signin: authSignin,
-  signup: authSignup,
+  ...authSchema,
 } as { [key: string]: ObjectSchema };
+
+export type SchemaName = "signin" | "signup";

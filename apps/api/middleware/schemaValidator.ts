@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import schemas from "@/schemas";
+import schemas, { SchemaName } from "@/schemas";
 
 interface ValidationError {
   message: string;
@@ -25,7 +25,10 @@ const validationOptions = {
   stripUnknown: false,
 };
 
-const schemaValidator = (name: string, useJoiError = true): RequestHandler => {
+const schemaValidator = (
+  name: SchemaName,
+  useJoiError = true
+): RequestHandler => {
   const schema = schemas[name];
 
   if (!schema) {
