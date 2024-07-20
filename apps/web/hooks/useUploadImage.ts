@@ -15,7 +15,6 @@ export const useUploadImage = () => {
         setUploadProgress(progress);
       },
     });
-
     setIsUploading(false);
     return res.url;
   };

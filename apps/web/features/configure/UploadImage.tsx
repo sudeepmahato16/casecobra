@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
-import { useRouter } from "next/navigation";
 import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
 import { cn, Progress, useToast } from "@casecobra/ui";
 import { useUploadImage } from "@/hooks/useUploadImage";
+import { createConfiguration } from "@/services/configure";
 
 const UploadImage = () => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const { isUploading, startUpload, uploadProgress } = useUploadImage();
-  const router = useRouter();
   const { toast } = useToast();
 
   const [isPending, startTransition] = useTransition();
@@ -19,11 +18,17 @@ const UploadImage = () => {
     if (!file) return;
 
     const imageUrl = await startUpload(file);
-
-    console.log(imageUrl);
-    // startTransition(() => {
-    //   router.
-    // });
+    startTransition(async () => {
+      try {
+        await createConfiguration({ imageUrl });
+      } catch (error) {
+        toast({
+          title: `failed to create configuration`,
+          description: "Please try later",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   const onDropRejected = (rejectedFiles: FileRejection[]) => {
