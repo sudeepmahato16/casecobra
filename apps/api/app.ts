@@ -4,6 +4,7 @@ import cors from "cors";
 
 import { authRouter } from "./routes/authRouter";
 import { userRouter } from "./routes/userRouter";
+import { configurationRouter } from "./routes/configurationRouter";
 import globalErrorHandler from "./controller/errorController";
 import AppError from "./utils/appError";
 import { initEdgeStore } from "./services/edgestore";
@@ -52,6 +53,7 @@ initEdgeStore(app);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/configure", configurationRouter);
 
 app.all("*", (req, _res, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));

@@ -21,7 +21,8 @@
     "html-to-text": "^9.0.5",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.14"
+    "nodemailer": "^6.9.14",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "@casecobra/db": "workspace:*",
