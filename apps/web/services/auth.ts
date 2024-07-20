@@ -6,6 +6,13 @@ import { revalidatePath } from "next/cache";
 import axios from "@/utils/axios";
 import { SignInFormData, SignUpFormData } from "@/types";
 
+export const getAccessTokenFromCookie = async () => {
+  const accessToken = cookies().get("casecobra-access-token");
+  if (!accessToken?.value) throw new Error("Please log in");
+
+  return accessToken.value;
+};
+
 export const signUp = async (formData: SignUpFormData) => {
   try {
     const { status } = await axios.post(`/auth/signup`, formData, {

@@ -1,14 +1,14 @@
 "use server";
-import { cookies } from "next/headers";
 import axios from "@/utils/axios";
+import { getAccessTokenFromCookie } from "./auth";
 
 export const getCurrentUser = async () => {
   try {
-    const accessToken = cookies().get("casecobra-access-token");
+    const accessToken = await getAccessTokenFromCookie();
 
     const { data } = await axios.get("/users/current-user", {
       headers: {
-        Authorization: `Bearer ${accessToken?.value}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
