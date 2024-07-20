@@ -54,3 +54,22 @@ export const createConfiguration = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const getConfigurationById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id) return next(new AppError("id not found!", 404));
+
+  const configuration = await db.configuration.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      configuration,
+    },
+  });
+});
