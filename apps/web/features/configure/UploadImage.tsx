@@ -1,18 +1,43 @@
 "use client";
 import React, { useState, useTransition } from "react";
-import Dropzone from "react-dropzone";
+import Dropzone, { FileRejection } from "react-dropzone";
+import { useRouter } from "next/navigation";
 import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
-import { cn, Progress } from "@casecobra/ui";
+import { cn, Progress, useToast } from "@casecobra/ui";
+import { useUploadImage } from "@/hooks/useUploadImage";
 
 const UploadImage = () => {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(40);
+  const { isUploading, startUpload, uploadProgress } = useUploadImage();
+  const router = useRouter();
+  const { toast } = useToast();
 
   const [isPending, startTransition] = useTransition();
 
-  const isUploading = false;
+  const onDropAccepted = async (acceptedFiles: File[]) => {
+    const [file] = acceptedFiles;
+    if (!file) return;
 
-  const onDropAccepted = async (acceptedFiles: File[]) => {};
+    const imageUrl = await startUpload(file);
+
+    console.log(imageUrl);
+    // startTransition(() => {
+    //   router.
+    // });
+  };
+
+  const onDropRejected = (rejectedFiles: FileRejection[]) => {
+    const [file] = rejectedFiles;
+
+    setIsDragOver(false);
+    if (!file) return;
+
+    toast({
+      title: `${file.file.type} type is not supported.`,
+      description: "Please choose a PNG, JPG, or JPEG image instead.",
+      variant: "destructive",
+    });
+  };
 
   return (
     <div
@@ -33,13 +58,14 @@ const UploadImage = () => {
           onDragEnter={() => setIsDragOver(true)}
           onDragLeave={() => setIsDragOver(false)}
           onDropAccepted={onDropAccepted}
+          onDropRejected={onDropRejected}
         >
           {({ getRootProps, getInputProps }) => (
             <div
               {...getRootProps()}
               className="h-full w-full flex-1 flex flex-col items-center justify-center"
             >
-              <input {...getInputProps()} />
+              <input {...getInputProps()} multiple={false} />
               {isDragOver ? (
                 <MousePointerSquareDashed className="h-6 w-6 text-zinc-500 mb-2" />
               ) : isUploading || isPending ? (

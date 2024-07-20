@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 
+import { Toaster } from "@casecobra/ui";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -11,6 +12,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <div className="flex-1 flex flex-col h-full">{children}</div>
       </main>
       <Footer />
+      <Toaster />
     </>
   );
 };
