@@ -7,4 +7,8 @@ export default {
   ...configurationSchema,
 } as { [key: string]: ObjectSchema };
 
-export type SchemaName = "signin" | "signup" | "createConfiguration";
+export type SchemaName =
+  | "signin"
+  | "signup"
+  | "createConfiguration"
+  | "updateConfiguration";

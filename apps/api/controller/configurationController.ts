@@ -73,3 +73,30 @@ export const getConfigurationById = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const updateConfiguration = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { croppedImageUrl, finish, material, model, color } = req.body;
+
+  if (!id) return next(new AppError("Id not found!", 404));
+
+  const configuration = await db.configuration.update({
+    where: {
+      id,
+    },
+    data: {
+      croppedImageUrl,
+      finish,
+      material,
+      model,
+      color,
+    },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      configuration,
+    },
+  });
+});
