@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { getCurrentUser } from "./services/user";
 
 export async function middleware(request: NextRequest) {
-  const protectedRoutes = ["/dashboard", "/configure"];
+  const protectedRoutes = ["/dashboard"];
 
   const currentPath = request.nextUrl.pathname;
 
