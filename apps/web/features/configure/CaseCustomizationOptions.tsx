@@ -22,16 +22,18 @@ import {
 import { formatPrice } from "@/utils/helper";
 import { BASE_PRICE } from "@/utils/config";
 import { COLORS, FINISHES, MATERIALS, MODELS } from "@/utils/constants";
-import { Options } from "./DesignConfigurator";
+import type { Options } from "./DesignConfigurator";
 
 interface CaseCustomizationOptionsProps {
   options: Options;
   setOptions: React.Dispatch<React.SetStateAction<Options>>;
+  onContinue: () => Promise<void>;
 }
 
 const CaseCustomizationOptions: FC<CaseCustomizationOptionsProps> = ({
   options,
   setOptions,
+  onContinue,
 }) => {
   return (
     <div className="h-[37.5rem] w-full col-span-full lg:col-span-1 flex flex-col bg-white">
@@ -205,7 +207,12 @@ const CaseCustomizationOptions: FC<CaseCustomizationOptionsProps> = ({
                   100
               )}
             </p>
-            <Button loadingText="Saving" size="lg" className="w-full">
+            <Button
+              loadingText="Saving"
+              size="lg"
+              className="w-full"
+              onClick={onContinue}
+            >
               Continue
               <ArrowRight className="h-4 w-4 ml-1.5 inline" />
             </Button>
