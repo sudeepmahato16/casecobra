@@ -2,7 +2,6 @@
 
 import { redirect } from "next/navigation";
 import axios from "@/utils/axios";
-import { getAccessTokenFromCookie } from "./auth";
 import {
   CaseColor,
   CaseFinish,
@@ -18,17 +17,7 @@ export const createConfiguration = async ({
 }) => {
   let configId;
   try {
-    const accessToken = await getAccessTokenFromCookie();
-
-    const { data } = await axios.post(
-      "/configure",
-      { imageUrl },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const { data } = await axios.post("/configure", { imageUrl });
     configId = data.data.configuration.id;
   } catch (error) {
     throw new Error("failed to create configuration");
@@ -40,14 +29,8 @@ export const createConfiguration = async ({
 export const getConfigurationById = async (
   id: string
 ): Promise<Configuration | null> => {
-  const accessToken = await getAccessTokenFromCookie();
-
   try {
-    const { data } = await axios.get(`/configure/${id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const { data } = await axios.get(`/configure/${id}`);
 
     return data.data.configuration;
   } catch (error) {
@@ -72,23 +55,13 @@ export const updateConfiguration = async ({
   finish,
   croppedImageUrl,
 }: SaveConfigArgs) => {
-  const accessToken = await getAccessTokenFromCookie();
-
-  const { data } = await axios.patch(
-    `/configure/${configId}`,
-    {
-      color,
-      model,
-      material,
-      finish,
-      croppedImageUrl,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const { data } = await axios.patch(`/configure/${configId}`, {
+    color,
+    model,
+    material,
+    finish,
+    croppedImageUrl,
+  });
 
   return data.data.configuration;
 };

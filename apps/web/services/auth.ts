@@ -8,7 +8,7 @@ import { SignInFormData, SignUpFormData } from "@/types";
 
 export const getAccessTokenFromCookie = async () => {
   const accessToken = cookies().get("casecobra-access-token");
-  if (!accessToken?.value) throw new Error("Please log in");
+  if (!accessToken?.value) return null;
 
   return accessToken.value;
 };

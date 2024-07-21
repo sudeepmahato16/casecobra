@@ -5,6 +5,7 @@ import { ArrowRight, Check } from "lucide-react";
 
 import { Button, cn } from "@casecobra/ui";
 import Phone from "@/components/Phone";
+import AuthModal from "../auth/AuthModal";
 
 import { formatPrice } from "@/utils/helper";
 import { BASE_PRICE, PRODUCT_PRICES } from "@/utils/config";
@@ -13,10 +14,15 @@ import { Configuration } from "@/types";
 
 interface DesignPreviewProps {
   configuration: Configuration;
+  isAuthenticated: boolean;
 }
 
-const DesignPreview: FC<DesignPreviewProps> = ({ configuration }) => {
+const DesignPreview: FC<DesignPreviewProps> = ({
+  configuration,
+  isAuthenticated,
+}) => {
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setShowConfetti(true);
@@ -37,6 +43,13 @@ const DesignPreview: FC<DesignPreviewProps> = ({ configuration }) => {
     totalPrice += PRODUCT_PRICES.material.polycarbonate;
   if (finish === "textured") totalPrice += PRODUCT_PRICES.finish.textured;
 
+  const onCheckout = () => {
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+  };
+
   return (
     <>
       <div
@@ -48,6 +61,8 @@ const DesignPreview: FC<DesignPreviewProps> = ({ configuration }) => {
           config={{ elementCount: 200, spread: 90 }}
         />
       </div>
+
+      <AuthModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
 
       <div className="mt-12 flex flex-col items-center md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
         <div className="md:col-span-4 lg:px-12 lg:mt-6 md:row-span-2 lg:self-start md:row-end-2">
@@ -151,7 +166,11 @@ const DesignPreview: FC<DesignPreviewProps> = ({ configuration }) => {
             </div>
 
             <div className="mt-8 flex justify-end pb-12">
-              <Button className="px-4 sm:px-6 lg:px-8">
+              <Button
+                size="lg"
+                className="px-4 sm:px-6 lg:px-7"
+                onClick={onCheckout}
+              >
                 Check out <ArrowRight className="h-4 w-4 ml-1.5 inline" />
               </Button>
             </div>

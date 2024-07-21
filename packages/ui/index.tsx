@@ -6,5 +6,6 @@ export * from "./components/toast";
 export * from "./components/aspect-ratio";
 export * from "./components/scroll-area";
 export * from "./components/dropdown-menu";
+export * from "./components/dialog";
 
 export * from "./lib/utils";
