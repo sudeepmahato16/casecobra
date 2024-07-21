@@ -27,13 +27,15 @@ import type { Options } from "./DesignConfigurator";
 interface CaseCustomizationOptionsProps {
   options: Options;
   setOptions: React.Dispatch<React.SetStateAction<Options>>;
-  onContinue: () => Promise<void>;
+  onContinue: () => void;
+  isLoading: boolean;
 }
 
 const CaseCustomizationOptions: FC<CaseCustomizationOptionsProps> = ({
   options,
   setOptions,
   onContinue,
+  isLoading,
 }) => {
   return (
     <div className="h-[37.5rem] w-full col-span-full lg:col-span-1 flex flex-col bg-white">
@@ -208,10 +210,11 @@ const CaseCustomizationOptions: FC<CaseCustomizationOptionsProps> = ({
               )}
             </p>
             <Button
-              loadingText="Saving"
+              loadingText="Saving..."
               size="lg"
               className="w-full"
               onClick={onContinue}
+              isLoading={isLoading}
             >
               Continue
               <ArrowRight className="h-4 w-4 ml-1.5 inline" />

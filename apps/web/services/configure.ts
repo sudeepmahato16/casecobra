@@ -3,7 +3,13 @@
 import { redirect } from "next/navigation";
 import axios from "@/utils/axios";
 import { getAccessTokenFromCookie } from "./auth";
-import { Configuration } from "@/types";
+import {
+  CaseColor,
+  CaseFinish,
+  CaseMaterial,
+  Configuration,
+  PhoneModel,
+} from "@/types";
 
 export const createConfiguration = async ({
   imageUrl,
@@ -47,4 +53,42 @@ export const getConfigurationById = async (
   } catch (error) {
     return null;
   }
+};
+
+export type SaveConfigArgs = {
+  color: CaseColor;
+  finish: CaseFinish;
+  material: CaseMaterial;
+  model: PhoneModel;
+  configId: string;
+  croppedImageUrl: string;
+};
+
+export const updateConfiguration = async ({
+  color,
+  configId,
+  model,
+  material,
+  finish,
+  croppedImageUrl,
+}: SaveConfigArgs) => {
+  const accessToken = await getAccessTokenFromCookie();
+
+  const { data } = await axios.patch(
+    `/configure/${configId}`,
+    {
+      color,
+      model,
+      material,
+      finish,
+      croppedImageUrl,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  return data.data.configuration;
 };

@@ -1,5 +1,6 @@
 "use client";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import ImageAdjuster from "./ImageAdjuster";
 import CaseCustomizationOptions from "./CaseCustomizationOptions";
@@ -7,6 +8,7 @@ import { useToast } from "@casecobra/ui";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { COLORS, FINISHES, MATERIALS, MODELS } from "@/utils/constants";
 import { base64ToBlob } from "@/utils/helper";
+import { updateConfiguration } from "@/services/configure";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -35,7 +37,7 @@ export type RenderedDimensions = {
 };
 
 const DesignConfigurator: FC<DesignConfiguratorProps> = ({
-  // configId,
+  configId,
   imageDimensions,
   imageUrl,
 }) => {
@@ -48,6 +50,8 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const phoneCaseRef = useRef<HTMLDivElement>(null);
+  const [isLoading, startTransition] = useTransition();
+  const router = useRouter();
 
   const [renderedDimensions, setRenderedDimensions] =
     useState<RenderedDimensions>({
@@ -63,59 +67,70 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
   const { toast } = useToast();
   const { startUpload } = useUploadImage();
 
-  const onContinue = async () => {
-    if (!containerRef.current || !phoneCaseRef.current) return;
+  const onContinue = () => {
+    startTransition(async () => {
+      try {
+        if (!containerRef.current || !phoneCaseRef.current) return;
+        const {
+          width,
+          height,
+          top: caseTop,
+          left: caseLeft,
+        } = phoneCaseRef.current.getBoundingClientRect();
+        const { top: containerTop, left: containerLeft } =
+          containerRef.current.getBoundingClientRect();
 
-    try {
-      const {
-        width,
-        height,
-        top: caseTop,
-        left: caseLeft,
-      } = phoneCaseRef.current.getBoundingClientRect();
-      const { top: containerTop, left: containerLeft } =
-        containerRef.current.getBoundingClientRect();
+        const offsetTop = caseTop - containerTop;
+        const offsetLeft = caseLeft - containerLeft;
 
-      const offsetTop = caseTop - containerTop;
-      const offsetLeft = caseLeft - containerLeft;
+        const actualX = renderedPosition.x - offsetLeft;
+        const actualY = renderedPosition.y - offsetTop;
 
-      const actualX = renderedPosition.x - offsetLeft;
-      const actualY = renderedPosition.y - offsetTop;
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
 
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
+        const ctx = canvas.getContext("2d");
 
-      const ctx = canvas.getContext("2d");
+        const userImage = new Image();
+        userImage.crossOrigin = "anonymous";
+        userImage.src = imageUrl;
+        await new Promise((resolve) => (userImage.onload = resolve));
 
-      const userImage = new Image();
-      userImage.crossOrigin = "anonymous";
-      userImage.src = imageUrl;
-      await new Promise((resolve) => (userImage.onload = resolve));
+        ctx?.drawImage(
+          userImage,
+          actualX,
+          actualY,
+          renderedDimensions.width,
+          renderedDimensions.height
+        );
 
-      ctx?.drawImage(
-        userImage,
-        actualX,
-        actualY,
-        renderedDimensions.width,
-        renderedDimensions.height
-      );
+        const base64 = canvas.toDataURL();
+        const base64Data = base64.split(",")[1];
 
-      const base64 = canvas.toDataURL();
-      const base64Data = base64.split(",")[1];
+        const blob = base64ToBlob(base64Data!, "image/png");
+        const file = new File([blob], "filename.png", { type: "image/png" });
+        const croppedImageUrl = await startUpload(file);
 
-      const blob = base64ToBlob(base64Data!, "image/png");
-      const file = new File([blob], "filename.png", { type: "image/png" });
-      const croppedImage = await startUpload(file);
-      console.log(croppedImage);
-    } catch (error) {
-      toast({
-        title: "Something went wrong",
-        description:
-          "There was a problem saving your config, please try again.",
-        variant: "destructive",
-      });
-    }
+        await updateConfiguration({
+          configId,
+          croppedImageUrl,
+          color: options.color.value,
+          finish: options.finish.value,
+          material: options.material.value,
+          model: options.model.value,
+        });
+
+        router.push(`/configure/preview?id=${configId}`);
+      } catch (error) {
+        toast({
+          title: "Something went wrong",
+          description:
+            "There was a problem saving your config, please try again.",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -138,6 +153,7 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
         options={options}
         setOptions={setOptions}
         onContinue={onContinue}
+        isLoading={isLoading}
       />
     </div>
   );

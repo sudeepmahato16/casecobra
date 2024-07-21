@@ -11,7 +11,7 @@ export const COLORS = [
 ] as const;
 
 export const MODELS = {
-  name: "models",
+  name: "model",
   options: [
     {
       label: "iPhone X",
