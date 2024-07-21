@@ -2,8 +2,8 @@
 
 import { redirect } from "next/navigation";
 import axios from "@/utils/axios";
-import { BASE_URL } from "@/utils/config";
 import { getAccessTokenFromCookie } from "./auth";
+import { Configuration } from "@/types";
 
 export const createConfiguration = async ({
   imageUrl,
@@ -15,7 +15,7 @@ export const createConfiguration = async ({
     const accessToken = await getAccessTokenFromCookie();
 
     const { data } = await axios.post(
-      `${BASE_URL}/configure`,
+      "/configure",
       { imageUrl },
       {
         headers: {
@@ -31,4 +31,20 @@ export const createConfiguration = async ({
   redirect(`/configure/design?id=${configId}`);
 };
 
-export const getConfigurationById = async () => {};
+export const getConfigurationById = async (
+  id: string
+): Promise<Configuration | null> => {
+  const accessToken = await getAccessTokenFromCookie();
+
+  try {
+    const { data } = await axios.get(`/configure/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return data.data.configuration;
+  } catch (error) {
+    return null;
+  }
+};

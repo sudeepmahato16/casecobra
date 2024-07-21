@@ -11,6 +11,7 @@
   "dependencies": {
     "@casecobra/ui": "workspace:*",
     "@edgestore/react": "^0.2.0",
+    "@headlessui/react": "^2.1.2",
     "@hookform/resolvers": "^3.9.0",
     "axios": "^1.7.2",
     "framer-motion": "^11.3.2",
@@ -20,6 +21,7 @@
     "react-dom": "18.3.1",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.1",
+    "react-rnd": "^10.4.11",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
   },
