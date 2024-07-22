@@ -1,5 +1,6 @@
-// eslint-disable-next-line turbo/no-undeclared-env-vars
+/* eslint-disable turbo/no-undeclared-env-vars */
 export const BASE_URL = process.env.BASE_URL;
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 
 export const PRODUCT_PRICES = {
   material: {

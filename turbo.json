@@ -1,6 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["API_URL"],
+  "globalDependencies": ["**/.env"],
+  "globalEnv": ["BASE_URL", "ADMIN_EMAIL"],
+
   "tasks": {
     "db:generate": {
       "cache": false

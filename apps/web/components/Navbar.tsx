@@ -6,10 +6,11 @@ import Logo from "./Logo";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import SignOutButton from "@/features/auth/SignOutButton";
 import { getCurrentUser } from "@/services/user";
+import { ADMIN_EMAIL } from "@/utils/config";
 
 const Navbar = async () => {
   const user = await getCurrentUser();
-  const isAdmin = false;
+  const isAdmin = ADMIN_EMAIL === user.user.email;
 
   return (
     <nav className="sticky z-[100] h-14 lg:h-16 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
