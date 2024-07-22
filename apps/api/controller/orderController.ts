@@ -167,3 +167,33 @@ export const webHooksCheckout = catchAsync(async (req, res, next) => {
     status: "success",
   });
 });
+
+export const getOrderById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id) return next(new AppError("Id not found!", 404));
+
+  if (!req.user) return next(new AppError("Unathorized", 401));
+
+  const order = await db.order.findUnique({
+    where: {
+      id,
+      userId: req.user.id,
+    },
+    include: {
+      shippingAddress: true,
+      billingAddress: true,
+      configuration: true,
+      user: true,
+    },
+  });
+
+  if (!order) return next(new AppError("order not found!", 404));
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      order,
+    },
+  });
+});
