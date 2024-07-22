@@ -8,6 +8,7 @@ import { configurationRouter } from "./routes/configurationRouter";
 import globalErrorHandler from "./controller/errorController";
 import AppError from "./utils/appError";
 import { initEdgeStore } from "./services/edgestore";
+import { orderRouter } from "./routes/orderRouter";
 
 declare global {
   namespace Express {
@@ -53,6 +54,7 @@ initEdgeStore(app);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/configure", configurationRouter);
 
 app.all("*", (req, _res, next) => {

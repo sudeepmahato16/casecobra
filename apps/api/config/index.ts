@@ -18,3 +18,21 @@ export const EMAIL_ACTIVATION_TOKEN_EXPIRES_IN =
 export const COOKIE_EXPIRES_IN = process.env.COOKIE_EXPIRES_IN;
 export const EDGE_STORE_ACCESS_KEY = process.env.EDGE_STORE_ACCESS_KEY;
 export const EDGE_STORE_SECRET_KEY = process.env.EDGE_STORE_SECRET_KEY;
+
+export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+export const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
+
+export const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+
+export const PRODUCT_PRICES = {
+  material: {
+    silicone: 0,
+    polycarbonate: 5_00,
+  },
+  finish: {
+    smooth: 0,
+    textured: 3_00,
+  },
+} as const;
+
+export const BASE_PRICE = 14_00;
