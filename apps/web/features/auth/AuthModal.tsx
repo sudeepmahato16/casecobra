@@ -14,10 +14,15 @@ import {
 const LoginModal = ({
   isOpen,
   setIsOpen,
+  configId,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  configId: string;
 }) => {
+  const onClick = () => {
+    localStorage.setItem("configId", configId);
+  };
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogContent className="absolute z-[9999999]">
@@ -45,12 +50,14 @@ const LoginModal = ({
           <Link
             href="/signin"
             className={buttonVariants({ variant: "outline", size: "lg" })}
+            onClick={onClick}
           >
             Login
           </Link>
           <Link
             href="/signup"
             className={buttonVariants({ variant: "default", size: "lg" })}
+            onClick={onClick}
           >
             Sign up
           </Link>

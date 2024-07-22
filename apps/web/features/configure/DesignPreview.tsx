@@ -62,7 +62,11 @@ const DesignPreview: FC<DesignPreviewProps> = ({
         />
       </div>
 
-      <AuthModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
+      <AuthModal
+        isOpen={isLoginModalOpen}
+        setIsOpen={setIsLoginModalOpen}
+        configId={configuration.id}
+      />
 
       <div className="mt-12 flex flex-col items-center md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
         <div className="md:col-span-4 lg:px-12 lg:mt-6 md:row-span-2 lg:self-start md:row-end-2">
