@@ -79,4 +79,33 @@ model Order {
 
   createdAt DateTime @default(now())
   updated   DateTime @updatedAt
+
+  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId String?          @db.ObjectId
+  billingAddress    BillingAddress?  @relation(fields: [billingAddressId], references: [id])
+  billingAddressId  String?          @db.ObjectId
+}
+
+model ShippingAddress {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  state       String?
+  phoneNumber String?
+  orders      Order[]
+}
+
+model BillingAddress {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  state       String?
+  phoneNumber String?
+  orders      Order[]
 }
