@@ -192,7 +192,7 @@ const DesignPreview: FC<DesignPreviewProps> = ({
             <div className="mt-8 flex justify-end pb-12">
               <Button
                 size="lg"
-                className="px-4 sm:px-6 lg:px-7"
+                className="xl:w-[156px] w-[148px] "
                 onClick={onCheckout}
                 isLoading={isLoading}
               >

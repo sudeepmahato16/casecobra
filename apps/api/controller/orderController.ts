@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import { db, Order } from "@casecobra/db";
 import {
+  ADMIN_EMAIL,
   BASE_PRICE,
   CLIENT_BASE_URL,
   PRODUCT_PRICES,
@@ -200,6 +201,105 @@ export const getOrderById = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       order,
+    },
+  });
+});
+
+export const getRecentOrders = catchAsync(async (req, res, next) => {
+  if (!req.user) return next(new AppError("Unauthorized", 401));
+
+  const user = await db.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+  });
+
+  if (!user) return next(new AppError("user not found!", 404));
+
+  if (user.email !== ADMIN_EMAIL) return next(new AppError("forbidden", 403));
+
+  const orders = await db.order.findMany({
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      status: true,
+      amount: true,
+      isPaid: true,
+      createdAt: true,
+      updatedAt: true,
+      shippingAddress: {
+        select: {
+          name: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      orders,
+    },
+  });
+});
+
+export const getStats = catchAsync(async (req, res, next) => {
+  if (!req.user) return next(new AppError("Unauthorized", 401));
+
+  const user = await db.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+  });
+
+  if (!user) return next(new AppError("user not found!", 404));
+
+  if (user.email !== ADMIN_EMAIL) return next(new AppError("forbidden", 403));
+
+  const lastWeekSum = await db.order.aggregate({
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+      },
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  const lastMonthSum = await db.order.aggregate({
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: new Date(new Date().setDate(new Date().getDate() - 30)),
+      },
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      lastWeekSum: lastWeekSum._sum.amount,
+      lastMonthSum: lastMonthSum._sum.amount,
     },
   });
 });
