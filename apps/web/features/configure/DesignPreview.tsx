@@ -1,9 +1,10 @@
 "use client";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Confetti from "react-dom-confetti";
 import { ArrowRight, Check } from "lucide-react";
 
-import { Button, cn } from "@casecobra/ui";
+import { Button, cn, useToast } from "@casecobra/ui";
 import Phone from "@/components/Phone";
 import AuthModal from "../auth/AuthModal";
 
@@ -11,6 +12,7 @@ import { formatPrice } from "@/utils/helper";
 import { BASE_PRICE, PRODUCT_PRICES } from "@/utils/config";
 import { COLORS, MODELS } from "@/utils/constants";
 import { Configuration } from "@/types";
+import { createPaymentSession } from "@/services/order";
 
 interface DesignPreviewProps {
   configuration: Configuration;
@@ -23,6 +25,9 @@ const DesignPreview: FC<DesignPreviewProps> = ({
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isLoading, startTransition] = useTransition();
+  const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     setShowConfetti(true);
@@ -48,6 +53,21 @@ const DesignPreview: FC<DesignPreviewProps> = ({
       setIsLoginModalOpen(true);
       return;
     }
+
+    startTransition(async () => {
+      const data = await createPaymentSession(configuration.id);
+
+      if (data.status === "error") {
+        toast({
+          title: `failed to checkout`,
+          description: "Please try later",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      router.push(`${data.data.session.url}`);
+    });
   };
 
   return (
@@ -174,6 +194,7 @@ const DesignPreview: FC<DesignPreviewProps> = ({
                 size="lg"
                 className="px-4 sm:px-6 lg:px-7"
                 onClick={onCheckout}
+                isLoading={isLoading}
               >
                 Check out <ArrowRight className="h-4 w-4 ml-1.5 inline" />
               </Button>
