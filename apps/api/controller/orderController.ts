@@ -1,5 +1,11 @@
+import Stripe from "stripe";
 import { db, Order } from "@casecobra/db";
-import { BASE_PRICE, CLIENT_BASE_URL, PRODUCT_PRICES } from "@/config";
+import {
+  BASE_PRICE,
+  CLIENT_BASE_URL,
+  PRODUCT_PRICES,
+  STRIPE_WEBHOOKS_SECRET,
+} from "@/config";
 import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";
 import { stripe } from "@/lib/stripe";
@@ -87,5 +93,77 @@ export const createCheckoutSession = catchAsync(async (req, res, next) => {
         url: stripeSession.url,
       },
     },
+  });
+});
+
+export const webHooksCheckout = catchAsync(async (req, res, next) => {
+  const signature = req.headers["stripe-signature"];
+
+  if (!signature) {
+    return next(new AppError("Invalid signature", 400));
+  }
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      STRIPE_WEBHOOKS_SECRET!
+    );
+  } catch (err: any) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  if (event.type === "checkout.session.completed") {
+    if (!event.data.object.customer_details?.email) {
+      return next(new AppError("Missing user email", 404));
+    }
+
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    const { userId, orderId } = session.metadata || {
+      userId: null,
+      orderId: null,
+    };
+
+    if (!userId || !orderId) {
+      throw new Error("Invalid request metadata");
+    }
+
+    const billingAddress = session.customer_details!.address;
+    const shippingAddress = session.shipping_details!.address;
+
+    const updatedOrder = await db.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        isPaid: true,
+        shippingAddress: {
+          create: {
+            name: session.customer_details!.name!,
+            city: shippingAddress!.city!,
+            country: shippingAddress!.country!,
+            postalCode: shippingAddress!.postal_code!,
+            street: shippingAddress!.line1!,
+            state: shippingAddress!.state,
+          },
+        },
+        billingAddress: {
+          create: {
+            name: session.customer_details!.name!,
+            city: billingAddress!.city!,
+            country: billingAddress!.country!,
+            postalCode: billingAddress!.postal_code!,
+            street: billingAddress!.line1!,
+            state: billingAddress!.state,
+          },
+        },
+      },
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
   });
 });

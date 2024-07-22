@@ -24,6 +24,8 @@ export const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
 export const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
 
+export const STRIPE_WEBHOOKS_SECRET = process.env.STRIPE_WEBHOOKS_SECRET;
+
 export const PRODUCT_PRICES = {
   material: {
     silicone: 0,

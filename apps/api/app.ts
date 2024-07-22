@@ -5,10 +5,12 @@ import cors from "cors";
 import { authRouter } from "./routes/authRouter";
 import { userRouter } from "./routes/userRouter";
 import { configurationRouter } from "./routes/configurationRouter";
-import globalErrorHandler from "./controller/errorController";
-import AppError from "./utils/appError";
-import { initEdgeStore } from "./services/edgestore";
 import { orderRouter } from "./routes/orderRouter";
+
+import globalErrorHandler from "./controller/errorController";
+import { webHooksCheckout } from "./controller/orderController";
+import { initEdgeStore } from "./services/edgestore";
+import AppError from "./utils/appError";
 
 declare global {
   namespace Express {
@@ -21,6 +23,21 @@ declare global {
 }
 
 const app: Express = express();
+
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
+
+app.options("*", cors());
+
+app.post(
+  "/webhooks/stripe",
+  express.raw({ type: "application/json" }),
+  webHooksCheckout
+);
 
 app.use(
   express.json({
@@ -36,15 +53,6 @@ app.use(
 );
 
 app.use(cookieParser());
-
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-  })
-);
-
-app.options("*", cors());
 
 app.get("/", (req, res, next) => {
   res.send("hello!");
