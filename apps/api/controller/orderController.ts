@@ -184,7 +184,13 @@ export const getOrderById = catchAsync(async (req, res, next) => {
       shippingAddress: true,
       billingAddress: true,
       configuration: true,
-      user: true,
+      user: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
     },
   });
 

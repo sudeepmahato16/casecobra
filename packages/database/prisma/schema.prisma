@@ -78,7 +78,7 @@ model Order {
   status          OrderStatus   @default(awaiting_shipment)
 
   createdAt DateTime @default(now())
-  updated   DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
   shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId String?          @db.ObjectId

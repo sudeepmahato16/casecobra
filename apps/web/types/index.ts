@@ -53,3 +53,43 @@ export type Configuration = {
   finish: CaseFinish | null;
   croppedImageUrl: string | null;
 };
+
+export type ShippingAddress = {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  state: string | null;
+  phoneNumber: string | null;
+};
+
+export type BillingAddress = {
+  id: string;
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  state: string | null;
+  phoneNumber: string | null;
+};
+
+export type Order = {
+  id: string;
+  configuration: Configuration;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  amount: number;
+  isPaid: boolean;
+  status: OrderStatus;
+  createdAt: Date;
+  updatedAt: Date;
+
+  shippingAddress: ShippingAddress;
+  billingAddress: BillingAddress;
+};
