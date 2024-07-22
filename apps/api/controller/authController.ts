@@ -138,7 +138,7 @@ export const verifyUser = catchAsync(async (req, res, next) => {
 
     new AuthManager(res)
       .createTokenAndCookie(user.id)
-      .redirect("http://localhost:3000");
+      .redirect("http://localhost:3000/auth-callback");
   } catch (error: any) {
     next(new AppError(error.message, 400));
   }

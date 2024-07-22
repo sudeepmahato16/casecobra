@@ -57,7 +57,7 @@ export const signIn = async (formData: SignInFormData) => {
   }
 
   revalidatePath("/");
-  redirect("/");
+  redirect("/auth-callback");
 };
 
 export const signOut = () => {
