@@ -1,86 +1,159 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Activate Your Account</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activate your account</title>
+
     <style>
-      body {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        background-color: #f2f4f6;
+      * {
         margin: 0;
         padding: 0;
       }
-      .container {
+
+      body,
+      html {
+        height: 100%;
         width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: sans-serif;
       }
-      .header {
-        background-color: green;
-        color: #ffffff;
-        padding: 20px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
+      main {
+        padding: 48px 0;
+        min-height: 100%;
+        min-width: 100%;
+        background-color: rgba(55, 185, 55, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      h2 {
+        color: #333;
+      }
+
+      p {
+        color: #444;
+        line-height: 1.55;
+      }
+
+      .container {
+        padding: 8px;
         text-align: center;
+        max-width: 580px;
       }
-      .header img {
-        max-width: 100px;
-        margin-bottom: 10px;
+
+      .mail {
+        width: 64px;
+        height: 64px;
+        color: hsl(141, 55%, 17%);
       }
+
       .content {
-        margin: 20px 0;
-        text-align: center;
+        background-color: #fff;
+        padding: 32px;
+        border-radius: 9px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 16px;
+
+        box-shadow: 0 0 24px 16px rgba(0, 0, 0, 0.02);
       }
-      .content p {
-        font-size: 16px;
-        line-height: 1.5;
-        color: #333333;
-        max-width: 470px;
-        margin: 0 auto;
+
+      @media screen and (max-width: 480px) {
+        .content {
+          padding: 8px;
+        }
+
+        .btn {
+          padding: 8px 16px;
+        }
       }
-      .button {
-        background-color: green;
-        color: #ffffff;
-        padding: 12px 24px;
+
+      .btn {
         text-decoration: none;
+        padding: 12px 24px;
+        background-color: hsl(141, 55%, 17%);
+        color: #fff;
+        font-family: inherit;
         border-radius: 5px;
-        display: inline-block;
-        font-size: 16px;
-        margin-top: 20px;
+        margin-top: 16px;
       }
-      .footer {
-        margin-top: 30px;
+
+      .additional-info {
+        color: #666;
+        margin: 24px 0;
+      }
+
+      .thanks {
+        color: #444;
         text-align: center;
-        color: #999999;
-        font-size: 14px;
+
+        font-weight: 500;
+        line-height: 1.6;
       }
-      .footer p {
-        margin: 5px 0;
+
+      .logo {
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .logo span {
+        color: hsl(140, 77%, 32%);
+      }
+
+      .logo-box {
+        text-align: center;
+        margin-bottom: 24px;
       }
     </style>
   </head>
+
   <body>
-    <div class="container">
-      <div class="header">
-        <h1>Welcome to CaseCobra!</h1>
+    <main>
+      <div class="container">
+        <div class="logo-box">
+          <a href="#" class="logo"> case<span>cobra</span> </a>
+        </div>
+        <div class="content">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="mail"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488m8.839 2.51-4.66-2.51m0 0-1.023-.55a2.25 2.25 0 0 0-2.134 0l-1.022.55m0 0-4.661 2.51m16.5 1.615a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V8.844a2.25 2.25 0 0 1 1.183-1.981l7.5-4.039a2.25 2.25 0 0 1 2.134 0l7.5 4.039a2.25 2.25 0 0 1 1.183 1.98V19.5Z"
+            />
+          </svg>
+
+          <h2>Confirm your email</h2>
+          <p>
+            Hello <%= name %>, please click on the button below to validate your
+            email address and confirm that you are the owner of this account.
+          </p>
+
+          <a href="<%= activationUrl %>" class="btn">Confirm your email</a>
+
+          <div class="additional-info">
+            <p>This link will expire in 24 hrs.</p>
+            <p>If you have questions, we're here to help.</p>
+          </div>
+
+          <div class="thanks">
+            <span>Thanks</span>
+            <p>Team CaseCobra</p>
+          </div>
+        </div>
       </div>
-      <div class="content">
-        <p>Hi <%= name %>,</p>
-        <p>
-          We're excited to have you get started. First, you need to activate
-          your account. Just press the button below.
-        </p>
-        <a href="<%= activationUrl %>" class="button">Activate Your Account</a>
-      </div>
-      <div class="footer">
-        <p>
-          If you did not sign up for this account, please ignore this email.
-        </p>
-        <p>Thank you,<br />CaseCobra Team</p>
-      </div>
-    </div>
+    </main>
   </body>
 </html>
