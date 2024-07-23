@@ -303,3 +303,38 @@ export const getStats = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const updateOrder = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!id) return next(new AppError("Id not found", 404));
+
+  if (!req.user) return next(new AppError("Unauthorized", 401));
+
+  const user = await db.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+  });
+
+  if (!user) return next(new AppError("user not found!", 404));
+
+  if (user.email !== ADMIN_EMAIL) return next(new AppError("forbidden", 403));
+
+  const order = await db.order.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      order,
+    },
+  });
+});
