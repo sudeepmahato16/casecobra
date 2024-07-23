@@ -2,7 +2,7 @@
 
 import axios from "@/utils/axios";
 import { getAccessTokenFromCookie } from "./auth";
-import { Order } from "@/types";
+import { Order, OrderStatus, ServerActionError } from "@/types";
 
 export const createPaymentSession = async (
   configId: string
@@ -15,10 +15,7 @@ export const createPaymentSession = async (
         };
       };
     }
-  | {
-      status: "error";
-      message: string;
-    }
+  | ServerActionError
 > => {
   try {
     const accessToken = await getAccessTokenFromCookie();
@@ -49,13 +46,7 @@ export const getPaymentStatus = async ({
   orderId,
 }: {
   orderId: string;
-}): Promise<
-  | {
-      status: "error";
-      message: string;
-    }
-  | GetPaymentStatusResult
-> => {
+}): Promise<ServerActionError | GetPaymentStatusResult> => {
   const accessToken = await getAccessTokenFromCookie();
   try {
     const { data } = await axios.get(`/order/${orderId}`, {
@@ -69,6 +60,76 @@ export const getPaymentStatus = async ({
     return {
       status: "error",
       message: "Something went wrong!",
+    };
+  }
+};
+
+export const getStats = async (): Promise<
+  | {
+      data: {
+        lastWeekSum: number;
+        lastMonthSum: number;
+      };
+      status: "success";
+    }
+  | ServerActionError
+> => {
+  const accessToken = await getAccessTokenFromCookie();
+
+  try {
+    const { data } = await axios.get("/order/stats", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    return {
+      status: "error",
+      message: "something went wrong!",
+    };
+  }
+};
+
+export const getRecentOrders = async (): Promise<
+  | ServerActionError
+  | {
+      status: "success";
+      data: {
+        orders: {
+          user: {
+            id: string;
+            email: string;
+            name: string | null;
+          };
+          id: string;
+          createdAt: Date;
+          updatedAt: Date;
+          amount: number;
+          isPaid: boolean;
+          status: OrderStatus;
+          shippingAddress: {
+            name: string;
+          } | null;
+        }[];
+      };
+    }
+> => {
+  const accessToken = await getAccessTokenFromCookie();
+
+  try {
+    const { data } = await axios.get("/order/recent-orders", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    return {
+      status: "error",
+      message: "something went wrong!",
     };
   }
 };

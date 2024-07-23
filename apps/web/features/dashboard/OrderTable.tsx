@@ -7,26 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@casecobra/ui";
+import StatusDropdown from "./StatusDropdown";
 import { formatPrice } from "@/utils/helper";
+import { getRecentOrders } from "@/services/order";
 
-const OrderTable = () => {
-  const orders: any[] = [
-    {
-      id: "669e35de899bc7f92c197bcf",
-      configurationId: "669e35be899bc7f92c197bce",
-      user: {
-        email: "sanji@gmail.com",
-      },
-      amount: 22,
-      isPaid: true,
-      status: "awaiting_shipment",
-      createdAt: new Date("2024-07-22T10:35:10.318Z"),
-      updatedAt: new Date("2024-07-22T10:35:56.655Z"),
-      shippingAddress: {
-        name: "sanji",
-      },
-    },
-  ];
+const OrderTable = async () => {
+  const response = await getRecentOrders();
+  if (response.status === "error") {
+    return <h1>Something went wrong!</h1>;
+  }
+
+  const { orders } = response.data;
 
   return (
     <div>
@@ -49,16 +40,18 @@ const OrderTable = () => {
           {orders.map((order) => (
             <TableRow key={order.id} className="bg-accent">
               <TableCell>
-                <div className="font-medium">{order.shippingAddress?.name}</div>
+                <p className="font-medium xl:text-lg">
+                  {order.shippingAddress?.name}
+                </p>
                 <div className="hidden text-sm text-muted-foreground md:inline">
                   {order.user.email}
                 </div>
               </TableCell>
               <TableCell className="hidden sm:table-cell">
-                {/* <StatusDropdown id={order.id} orderStatus={order.status} /> */}
+                <StatusDropdown id={order.id} orderStatus={order.status} />
               </TableCell>
               <TableCell className="hidden md:table-cell">
-                {order.createdAt.toLocaleDateString()}
+                {new Date(order.createdAt).toLocaleDateString()}
               </TableCell>
               <TableCell className="text-right">
                 {formatPrice(order.amount)}

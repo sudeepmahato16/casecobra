@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getCurrentUser } from "./services/user";
+import { ADMIN_EMAIL } from "./utils/config";
 
 export async function middleware(request: NextRequest) {
-  const protectedRoutes = ["/dashboard"];
+  const forbiddenRoutes = ["/dashboard"];
 
   const currentPath = request.nextUrl.pathname;
 
-  const isProtectedRoute = protectedRoutes.includes(currentPath);
+  const isForbiddenRoute = forbiddenRoutes.includes(currentPath);
 
-  if (isProtectedRoute) {
-    const user = await getCurrentUser();
+  if (isForbiddenRoute) {
+    const data = await getCurrentUser();
 
-    if (!user)
-      return NextResponse.redirect(new URL("/signin", request.nextUrl));
+    if (!data || data.user.email !== ADMIN_EMAIL)
+      return NextResponse.redirect(new URL("/not-found", request.nextUrl));
   }
 
   return NextResponse.next();

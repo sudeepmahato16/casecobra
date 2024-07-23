@@ -2,7 +2,13 @@
 import axios from "@/utils/axios";
 import { getAccessTokenFromCookie } from "./auth";
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<{
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+} | null> => {
   try {
     const accessToken = await getAccessTokenFromCookie();
 

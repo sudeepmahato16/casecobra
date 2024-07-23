@@ -93,3 +93,8 @@ export type Order = {
   shippingAddress: ShippingAddress;
   billingAddress: BillingAddress;
 };
+
+export type ServerActionError = {
+  status: "error";
+  message: string;
+};

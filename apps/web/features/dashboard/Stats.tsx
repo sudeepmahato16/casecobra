@@ -10,13 +10,19 @@ import {
   Progress,
 } from "@casecobra/ui";
 import { formatPrice } from "@/utils/helper";
+import { getStats } from "@/services/order";
 
-const Stats = () => {
+const Stats = async () => {
+  const response = await getStats();
+
+  if (response.status === "error") {
+    return <h1>Something went wrong</h1>;
+  }
+
   const WEEKLY_GOAL = 500;
   const MONTHLY_GOAL = 2500;
 
-  const lastWeekSum = 230;
-  const lastMonthSum = 2200;
+  const { lastMonthSum = 0, lastWeekSum = 0 } = response.data;
   return (
     <div className="grid gap-6 sm:grid-cols-2">
       <Card>
