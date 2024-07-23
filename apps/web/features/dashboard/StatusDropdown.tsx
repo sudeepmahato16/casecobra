@@ -8,8 +8,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  useToast,
 } from "@casecobra/ui";
 import { OrderStatus } from "@/types";
+import { updateOrderStatus } from "@/services/order";
 
 const LABEL_MAP: Record<OrderStatus, string> = {
   fulfilled: "Fulfilled",
@@ -26,9 +28,20 @@ interface StatusDropdownProps {
 
 const StatusDropdown: FC<StatusDropdownProps> = ({ id, orderStatus }) => {
   const [status, setStatus] = useState<OrderStatus>(orderStatus);
+  const { toast } = useToast();
 
-  const onClick = (newStatus: OrderStatus) => {
+  const onClick = async (newStatus: OrderStatus) => {
+    let previousStatus = status;
     setStatus(newStatus);
+
+    const res = await updateOrderStatus({ id, status: newStatus });
+    if (res.status === "error") {
+      toast({
+        title: res.message,
+        variant: "destructive",
+      });
+      setStatus(previousStatus);
+    }
   };
 
   return (

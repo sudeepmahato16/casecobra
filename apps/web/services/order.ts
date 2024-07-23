@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import axios from "@/utils/axios";
 import { getAccessTokenFromCookie } from "./auth";
 import { Order, OrderStatus, ServerActionError } from "@/types";
@@ -124,6 +125,43 @@ export const getRecentOrders = async (): Promise<
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    return data;
+  } catch (error) {
+    return {
+      status: "error",
+      message: "something went wrong!",
+    };
+  }
+};
+
+export const updateOrderStatus = async ({
+  status,
+  id,
+}: {
+  status: OrderStatus;
+  id: string;
+}): Promise<
+  | ServerActionError
+  | {
+      status: "success";
+      data: any;
+    }
+> => {
+  const accessToken = await getAccessTokenFromCookie();
+
+  try {
+    const { data } = await axios.patch(
+      `/order/${id}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    revalidatePath("/dashboard");
 
     return data;
   } catch (error) {
