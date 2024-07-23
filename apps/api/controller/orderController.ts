@@ -10,6 +10,7 @@ import {
 import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";
 import { stripe } from "@/lib/stripe";
+import Email from "@/services/email";
 
 export const createCheckoutSession = catchAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -161,6 +162,24 @@ export const webHooksCheckout = catchAsync(async (req, res, next) => {
           },
         },
       },
+    });
+
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) return;
+
+    await new Email({
+      user: {
+        name: user.name || "",
+        email: user?.email,
+      },
+    }).sendThankYouMail({
+      orderDate: new Date(updatedOrder.createdAt).toLocaleDateString(),
+      orderId,
     });
   }
 

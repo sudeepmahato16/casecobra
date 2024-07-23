@@ -81,8 +81,7 @@ export const signUp = catchAsync(async (req, res, next) => {
 
     await new Email({
       user: { email, name },
-      url,
-    }).sendEmailActivationMail();
+    }).sendEmailActivationMail(url);
 
     res.status(201).json({
       status: "success",

@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 48px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      padding: 0 12px;
+    }
+
+    .section {
+      text-align: center;
+    }
+
+    .heading {
+      color: #333;
+      font-weight: 600;
+      font-size: 24px;
+    }
+
+    .desc,
+    .name,
+    .address {
+      color: #444;
+      line-height: 1.65;
+    }
+
+    .desc {
+      margin-bottom: 4px;
+    }
+
+    .order {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      gap: 8px;
+      color: #444;
+      font-size: 14px;
+      margin: 64px 0;
+    }
+
+    .footer p {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+
+    .copyright {
+      margin-bottom: -6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <section class="section">
+      <img
+        src="https://files.edgestore.dev/h048x3pbohp2pkho/publicFiles/_public/eef6805a-8a18-41f2-a0f4-f8c18e3d4535.png"
+        width='65' height='73' alt='delivery snake' />
+      <h3 class="heading">Thank you for your order!</h3>
+      <p class="desc">
+        We're preparing everything for delivery and will notify you once
+        your package has been shipped. Delivery usually takes 2 days.
+      </p>
+      <p class="desc">
+        If you have any questions regarding your order, please feel free
+        to contact us with your order number and we're here to help.
+      </p>
+    </section>
+
+
+    <section>
+      <div class="order">
+        <span>Order no: <%= orderId %></span>
+        <span>Order date: <%= orderDate %></span>
+      </div>
+    </section>
+
+
+
+    <footer class="footer">
+
+      <p class="copyright">
+        © CaseCobra, Inc. All Rights Reserved.
+      </p>
+      <p>
+
+        Please contact us if you have any questions. (If you reply to
+        this email, we won't be able to see it.)
+      </p>
+
+    </footer>
+  </div>
+</Body>
+</body>
+
+</html>

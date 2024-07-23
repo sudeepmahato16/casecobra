@@ -10,13 +10,11 @@ import {
 
 interface IEmail {
   user: { name: string; email: string };
-  url: string;
 }
 
 class Email {
   to: string;
   name: string;
-  url: string;
   from = `CaseCobra <hello@casecobra.com>`;
 
   transportOptions = {
@@ -35,17 +33,16 @@ class Email {
     },
   };
 
-  constructor({ user, url }: IEmail) {
+  constructor({ user }: IEmail) {
     this.to = user.email;
     this.name = user.name;
-    this.url = url;
   }
 
-  createTransport() {
+  private createTransport() {
     return nodemailer.createTransport(this.transportOptions);
   }
 
-  async send(subject: string, html: string) {
+  private async send(subject: string, html: string) {
     const mailOptions = {
       html,
       subject,
@@ -57,16 +54,35 @@ class Email {
     await this.createTransport().sendMail(mailOptions);
   }
 
-  async sendEmailActivationMail() {
+  async sendEmailActivationMail(url: string) {
     const html = await ejs.renderFile(
       __dirname + "/templates/activation-mail.ejs",
       {
         name: this.name,
-        activationUrl: this.url,
+        activationUrl: url,
       }
     );
 
     await this.send("Activate your account", html);
+  }
+
+  async sendThankYouMail({
+    orderDate,
+    orderId,
+  }: {
+    orderId: string;
+    orderDate: string;
+  }) {
+    const html = await ejs.renderFile(
+      __dirname + "/templates/thank-u-mail.ejs",
+      {
+        name: this.name,
+        orderDate,
+        orderId,
+      }
+    );
+
+    await this.send("Thank you for your order", html);
   }
 }
 
