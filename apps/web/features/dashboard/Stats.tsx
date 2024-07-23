@@ -9,6 +9,7 @@ import {
   CardTitle,
   Progress,
 } from "@casecobra/ui";
+import Error from "@/components/Error";
 import { formatPrice } from "@/utils/helper";
 import { getStats } from "@/services/order";
 
@@ -16,7 +17,7 @@ const Stats = async () => {
   const response = await getStats();
 
   if (response.status === "error") {
-    return <h1>Something went wrong</h1>;
+    return <Error />;
   }
 
   const WEEKLY_GOAL = 500;
