@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 export const formatPrice = (price: number) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -14,3 +16,43 @@ export const base64ToBlob = (base64: string, mimeType: string) => {
   const byteArray = new Uint8Array(byteNumbers);
   return new Blob([byteArray], { type: mimeType });
 };
+
+export function constructMetadata({
+  title = "CaseCobra",
+  description = "Create custom high-quality phone cases in seconds",
+  image = "/thumbnail.png",
+  icons = {
+    icon: {
+      url: "/favicon.ico",
+    },
+  },
+}: {
+  title?: string;
+  description?: string;
+  image?: string;
+  icons?: {
+    icon: {
+      url: string;
+    };
+  };
+} = {}): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: image }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+      creator: "Sudeep Mahato",
+    },
+    icons,
+    // eslint-disable-next-line turbo/no-undeclared-env-vars
+    metadataBase: new URL(process.env.ORIGIN!),
+  };
+}
