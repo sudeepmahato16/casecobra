@@ -3,7 +3,7 @@ import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button, Input, Label } from "@casecobra/ui";
+import { Button, Input, Label, useToast } from "@casecobra/ui";
 import FormItem from "./FormItem";
 import { SignUpFormData, SignUpSchema } from "@/types";
 import { signUp } from "@/services/auth";
@@ -13,6 +13,7 @@ const SignupForm = () => {
     register,
     formState: { errors },
     handleSubmit,
+    setError,
   } = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -21,12 +22,23 @@ const SignupForm = () => {
       password: "",
     },
   });
+  const { toast } = useToast();
 
   const [isLoading, startTransition] = useTransition();
 
   const onSubmit = (data: SignUpFormData) => {
     startTransition(async () => {
-      await signUp(data);
+      const res = await signUp(data);
+      if (res && res.message) {
+        toast({
+          title: "failed to sign up",
+          description: res.message,
+          variant: "destructive",
+        });
+
+        if (res.message === "Email is in use")
+          setError("email", { message: res.message }, { shouldFocus: true });
+      }
     });
   };
 
@@ -44,6 +56,7 @@ const SignupForm = () => {
             required: true,
           })}
           autoFocus
+          error={!!errors.name}
         />
       </FormItem>
 
@@ -55,6 +68,7 @@ const SignupForm = () => {
           {...register("email", {
             required: true,
           })}
+          error={!!errors.email}
         />
       </FormItem>
 
@@ -66,6 +80,7 @@ const SignupForm = () => {
           {...register("password", {
             required: true,
           })}
+          error={!!errors.password}
         />
       </FormItem>
 

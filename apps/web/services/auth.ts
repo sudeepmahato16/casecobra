@@ -15,15 +15,13 @@ export const getAccessTokenFromCookie = async () => {
 
 export const signUp = async (formData: SignUpFormData) => {
   try {
-    const { status } = await axios.post(`/auth/signup`, formData, {
+    await axios.post(`/auth/signup`, formData, {
       withCredentials: true,
     });
-
-    if (status !== 201) throw new Error("Failed to sign up");
   } catch (error: any) {
     return {
-      status: "fail",
-      message: error.message,
+      status: "error",
+      message: error.response.data.message,
     };
   }
 
@@ -32,11 +30,9 @@ export const signUp = async (formData: SignUpFormData) => {
 
 export const signIn = async (formData: SignInFormData) => {
   try {
-    const { status, headers } = await axios.post(`/auth/signin`, formData, {
+    const { headers } = await axios.post(`/auth/signin`, formData, {
       withCredentials: true,
     });
-
-    if (status !== 200) throw new Error("fail to login");
 
     const cookie = cookies();
     headers["set-cookie"]?.map((c) => {
@@ -51,8 +47,8 @@ export const signIn = async (formData: SignInFormData) => {
     });
   } catch (error: any) {
     return {
-      status: "fail",
-      message: error.message,
+      status: "error",
+      message: error.response.data.message,
     };
   }
 

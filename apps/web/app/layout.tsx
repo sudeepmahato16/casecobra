@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Recursive } from "next/font/google";
+import { Toaster } from "@casecobra/ui";
 import { constructMetadata } from "@/utils/helper";
 import "./globals.css";
 
@@ -17,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={recursive.className}>{children}</body>
+      <body className={recursive.className}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

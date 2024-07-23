@@ -33,7 +33,7 @@ const FormItem: FC<FormItemProps> = ({ children, error }) => {
               ease: "easeOut",
               type: "tween",
             }}
-            className="text-red-500 -mt-2"
+            className="text-red-500 -mt-2 text-sm text-end"
           >
             {error}
           </motion.small>
