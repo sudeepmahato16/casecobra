@@ -3,7 +3,7 @@ import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button, Input, Label, useToast } from "@casecobra/ui";
+import { Button, Input, Label, toast } from "@casecobra/ui";
 import FormItem from "./FormItem";
 import { SignUpFormData, SignUpSchema } from "@/types";
 import { signUp } from "@/services/auth";
@@ -22,7 +22,6 @@ const SignupForm = () => {
       password: "",
     },
   });
-  const { toast } = useToast();
 
   const [isLoading, startTransition] = useTransition();
 
@@ -30,11 +29,7 @@ const SignupForm = () => {
     startTransition(async () => {
       const res = await signUp(data);
       if (res && res.message) {
-        toast({
-          title: "failed to sign up",
-          description: res.message,
-          variant: "destructive",
-        });
+        toast.error(res.message);
 
         if (res.message === "Email is in use")
           setError("email", { message: res.message }, { shouldFocus: true });

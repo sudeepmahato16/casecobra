@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Confetti from "react-dom-confetti";
 import { ArrowRight, Check } from "lucide-react";
 
-import { Button, cn, useToast } from "@casecobra/ui";
+import { Button, cn, toast } from "@casecobra/ui";
 import Phone from "@/components/Phone";
 import AuthModal from "../auth/AuthModal";
 
@@ -27,7 +27,6 @@ const DesignPreview: FC<DesignPreviewProps> = ({
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isLoading, startTransition] = useTransition();
   const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     setShowConfetti(true);
@@ -58,11 +57,7 @@ const DesignPreview: FC<DesignPreviewProps> = ({
       const data = await createPaymentSession(configuration.id);
 
       if (data.status === "error") {
-        toast({
-          title: `failed to checkout`,
-          description: "Please try later",
-          variant: "destructive",
-        });
+        toast.error(`Failed to checkout`);
         return;
       }
 

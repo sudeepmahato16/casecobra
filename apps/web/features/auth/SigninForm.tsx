@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { signIn } from "@/services/auth";
-import { Button, Input, Label, useToast } from "@casecobra/ui";
+import { Button, Input, Label, toast } from "@casecobra/ui";
 import FormItem from "./FormItem";
 import { SignInFormData, SignInSchema } from "@/types";
 
@@ -23,18 +23,13 @@ const SigninForm = () => {
   });
 
   const [isLoading, startTransition] = useTransition();
-  const { toast } = useToast();
 
   const onSubmit = (data: SignInFormData) => {
     startTransition(async () => {
       const res = await signIn(data);
 
       if (res && res.status === "error") {
-        toast({
-          title: "failed",
-          description: res.message,
-          variant: "destructive",
-        });
+        toast.error(res.message);
         setError("email", {});
         setError("password", {}, { shouldFocus: true });
       }

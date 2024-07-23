@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import ImageAdjuster from "./ImageAdjuster";
 import CaseCustomizationOptions from "./CaseCustomizationOptions";
-import { useToast } from "@casecobra/ui";
+import { toast } from "@casecobra/ui";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { COLORS, FINISHES, MATERIALS, MODELS } from "@/utils/constants";
 import { base64ToBlob } from "@/utils/helper";
@@ -64,7 +64,6 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
     y: 200,
   });
 
-  const { toast } = useToast();
   const { startUpload } = useUploadImage();
 
   const onContinue = () => {
@@ -123,12 +122,9 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
 
         router.push(`/configure/preview?id=${configId}`);
       } catch (error) {
-        toast({
-          title: "Something went wrong",
-          description:
-            "There was a problem saving your config, please try again.",
-          variant: "destructive",
-        });
+        toast.error(
+          "There was a problem saving your config, please try again."
+        );
       }
     });
   };

@@ -20,7 +20,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={recursive.className}>
         {children}
-        <Toaster />
+        <Toaster
+          richColors
+          position="bottom-right"
+          toastOptions={{
+            classNames: {
+              error: "xl:text-base text-sm",
+              description: "text-sm",
+            },
+          }}
+        />
       </body>
     </html>
   );
