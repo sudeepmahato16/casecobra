@@ -5,9 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "start": "ts-node -r tsconfig-paths/register --transpile-only server.ts",
-    "build": "echo hello",
-    "vercel-build": "echo hello"
+    "start": "ts-node -r tsconfig-paths/register --transpile-only server.ts"
   },
   "keywords": [],
   "author": "",
