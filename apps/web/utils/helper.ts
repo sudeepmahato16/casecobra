@@ -52,7 +52,5 @@ export function constructMetadata({
       creator: "Sudeep Mahato",
     },
     icons,
-    // eslint-disable-next-line turbo/no-undeclared-env-vars
-    metadataBase: new URL(process.env.ORIGIN!),
   };
 }
