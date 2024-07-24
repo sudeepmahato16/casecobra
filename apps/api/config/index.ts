@@ -22,7 +22,7 @@ export const EDGE_STORE_SECRET_KEY = process.env.EDGE_STORE_SECRET_KEY;
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 export const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
-export const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+export const CLIENT_URL = process.env.CLIENT_URL;
 
 export const STRIPE_WEBHOOKS_SECRET = process.env.STRIPE_WEBHOOKS_SECRET;
 
@@ -40,3 +40,7 @@ export const PRODUCT_PRICES = {
 export const BASE_PRICE = 14_00;
 
 export const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+export const GOOGLE_OAUTH_REDIRECT_URL = process.env.GOOGLE_OATUTH_REDIRECT_URL;

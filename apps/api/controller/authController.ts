@@ -2,13 +2,40 @@ import { Response } from "express";
 import * as bcrypt from "bcrypt";
 import crypto from "crypto";
 import { ObjectId } from "bson";
+import qs from "qs";
 
 import { db } from "@casecobra/db";
 import Email from "@/services/email";
 import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";
 import AuthManager from "@/utils/authManager";
-import { EMAIL_ACTIVATION_TOKEN_EXPIRES_IN } from "@/config";
+import {
+  CLIENT_URL,
+  EMAIL_ACTIVATION_TOKEN_EXPIRES_IN,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_OAUTH_REDIRECT_URL,
+} from "@/config";
+import axios from "axios";
+
+interface GoogleTokensResult {
+  access_token: string;
+  expires_in: Number;
+  refresh_token: string;
+  scope: string;
+  id_token: string;
+}
+
+interface GoogleUserResult {
+  id: string;
+  email: string;
+  verified_email: boolean;
+  name: string;
+  given_name: string;
+  family_name: string;
+  picture: string;
+  locale: string;
+}
 
 const createHashToken = (token: string) => {
   return crypto.createHash("sha256").update(token).digest("hex");
@@ -102,7 +129,10 @@ export const signIn = catchAsync(async (req, res, next) => {
     },
   });
 
-  if (!user || (user && !(await bcrypt.compare(password, user.password)))) {
+  if (
+    !user ||
+    (user && user.password && !(await bcrypt.compare(password, user.password)))
+  ) {
     return next(new AppError("Incorrect email or password!", 401));
   }
 
@@ -157,4 +187,89 @@ export const signOut = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
   });
+});
+
+const getGoogleOauthToken = async (code: string) => {
+  const url = "https://oauth2.googleapis.com/token";
+
+  const values = {
+    code,
+    client_id: GOOGLE_CLIENT_ID,
+    client_secret: GOOGLE_CLIENT_SECRET,
+    redirect_uri: GOOGLE_OAUTH_REDIRECT_URL,
+    grant_type: "authorization_code",
+  };
+
+  try {
+    const res = await axios.post<GoogleTokensResult>(
+      url,
+      qs.stringify(values),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+    return res.data;
+  } catch (error: any) {
+    console.error(error.response.data);
+    throw new Error(error.message);
+  }
+};
+
+export async function getGoogleUser({
+  id_token,
+  access_token,
+}: {
+  id_token: string;
+  access_token: string;
+}): Promise<GoogleUserResult> {
+  try {
+    const res = await axios.get<GoogleUserResult>(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${id_token}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+export const googleOauthHandler = catchAsync(async (req, res, next) => {
+  try {
+    const code = req.query.code as string;
+
+    const { access_token, id_token } = await getGoogleOauthToken(code);
+    const googleUser = await getGoogleUser({ id_token, access_token });
+
+    if (!googleUser.verified_email) {
+      return res.status(403).send("Google account is not verified");
+    }
+
+    const user = await db.user.upsert({
+      where: {
+        email: googleUser.email,
+      },
+      update: {
+        name: googleUser.name,
+      },
+      create: {
+        email: googleUser.email,
+        name: googleUser.name,
+        isVerified: true,
+      },
+    });
+
+    console.log(CLIENT_URL);
+
+    new AuthManager(res)
+      .createTokenAndCookie(user.id)
+      .redirect(`${CLIENT_URL!}/auth-callback`);
+  } catch (error) {
+    res.redirect(`${CLIENT_URL!}`);
+  }
 });

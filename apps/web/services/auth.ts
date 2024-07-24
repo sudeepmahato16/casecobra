@@ -21,7 +21,7 @@ export const signUp = async (formData: SignUpFormData) => {
   } catch (error: any) {
     return {
       status: "error",
-      message: error.response.data.message,
+      message: error?.response?.data.message || "Something went wrong!",
     };
   }
 
@@ -48,7 +48,7 @@ export const signIn = async (formData: SignInFormData) => {
   } catch (error: any) {
     return {
       status: "error",
-      message: error.response.data.message,
+      message: error?.response?.data.message || "Something went wrong!",
     };
   }
 

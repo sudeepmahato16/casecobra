@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { signIn } from "@/services/auth";
 import { Button, Input, Label, toast } from "@casecobra/ui";
+import GoogleSignIn from "./GoogleSignIn";
 import FormItem from "./FormItem";
 import { SignInFormData, SignInSchema } from "@/types";
 
@@ -69,6 +70,15 @@ const SigninForm = () => {
       <Button type="submit" size="lg" className="mt-4" isLoading={isLoading}>
         Continue
       </Button>
+
+      <div className="my-3 relative">
+        <span className="block p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-500 bg-white">
+          or
+        </span>
+        <hr className="-z-0" />
+      </div>
+
+      <GoogleSignIn />
     </form>
   );
 };

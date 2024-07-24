@@ -7,6 +7,7 @@ import { Button, Input, Label, toast } from "@casecobra/ui";
 import FormItem from "./FormItem";
 import { SignUpFormData, SignUpSchema } from "@/types";
 import { signUp } from "@/services/auth";
+import GoogleSignIn from "./GoogleSignIn";
 
 const SignupForm = () => {
   const {
@@ -82,6 +83,15 @@ const SignupForm = () => {
       <Button type="submit" size="lg" className="mt-4" isLoading={isLoading}>
         Continue
       </Button>
+
+      <div className="my-3 relative">
+        <span className="block p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-500 bg-white">
+          or
+        </span>
+        <hr className="-z-0" />
+      </div>
+
+      <GoogleSignIn />
     </form>
   );
 };

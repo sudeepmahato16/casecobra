@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  googleOauthHandler,
   signIn,
   signOut,
   signUp,
@@ -11,6 +12,7 @@ const authRouter: Router = Router();
 
 authRouter.post("/signup", schemaValidator("signup"), signUp);
 authRouter.post("/signin", schemaValidator("signin"), signIn);
+authRouter.get("/oauth/google", googleOauthHandler);
 authRouter.get("/signout", signOut);
 
 authRouter.get("/verify", verifyUser);

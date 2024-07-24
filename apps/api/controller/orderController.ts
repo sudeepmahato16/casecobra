@@ -3,7 +3,7 @@ import { db, Order } from "@casecobra/db";
 import {
   ADMIN_EMAIL,
   BASE_PRICE,
-  CLIENT_BASE_URL,
+  CLIENT_URL,
   PRODUCT_PRICES,
   STRIPE_WEBHOOKS_SECRET,
 } from "@/config";
@@ -74,8 +74,8 @@ export const createCheckoutSession = catchAsync(async (req, res, next) => {
   });
 
   const stripeSession = await stripe.checkout.sessions.create({
-    success_url: `${CLIENT_BASE_URL}/thank-you?orderId=${order.id}`,
-    cancel_url: `${CLIENT_BASE_URL}/configure/preview?id=${configuration.id}`,
+    success_url: `${CLIENT_URL}/thank-you?orderId=${order.id}`,
+    cancel_url: `${CLIENT_URL}/configure/preview?id=${configuration.id}`,
     payment_method_types: ["card", "klarna"],
     mode: "payment",
     shipping_address_collection: {
