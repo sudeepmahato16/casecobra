@@ -24,7 +24,7 @@ function splitArray<T>(array: Array<T>, numParts: number) {
     if (!result[index]) {
       result[index] = [];
     }
-    result[index].push(array[i]!);
+    result[index]?.push(array[i]!);
   }
 
   return result;
