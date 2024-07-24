@@ -18,18 +18,12 @@ class Email {
   from = `CaseCobra <hello@casecobra.com>`;
 
   transportOptions = {
-    // host: EMAIL_HOST,
-    // port: Number(EMAIL_PORT),
-    // secure: true,
-    // auth: {
-    //   user: EMAIL_USERNAME,
-    //   pass: EMAIL_PASSWORD,
-    // },
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: EMAIL_HOST,
+    port: Number(EMAIL_PORT),
+    secure: true,
     auth: {
-      user: "662c6db5bf7418",
-      pass: "c08793f63cd588",
+      user: EMAIL_USERNAME,
+      pass: EMAIL_PASSWORD,
     },
   };
 
