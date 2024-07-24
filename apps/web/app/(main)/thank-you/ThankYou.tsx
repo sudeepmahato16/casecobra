@@ -31,7 +31,7 @@ const ThankYou: FC<ThankYouProps> = ({ order }) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [isPaid]);
+  }, [isPaid, router]);
 
   if (!isPaid) {
     return (

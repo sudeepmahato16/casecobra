@@ -20,7 +20,7 @@ const Redirect: FC<RedirectProps> = ({ children }) => {
     } else {
       router.push("/");
     }
-  }, []);
+  }, [router]);
 
   return <>{children}</>;
 };
