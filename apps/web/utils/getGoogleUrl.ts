@@ -1,7 +1,12 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
-
 export const getGoogleOauthUrl = () => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+
+  if (
+    !process.env.NEXT_PUBLIC_GOOGLE_OATH_REDIRECT_URL ||
+    !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+  )
+    return "/";
 
   const options = {
     redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_OATH_REDIRECT_URL!,
