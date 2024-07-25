@@ -147,8 +147,17 @@ export const verifyUser = catchAsync(async (req, res, next) => {
   try {
     const user = await checkEmailVerificationToken(token);
 
+    console.log("user", user);
+
     if (!user) {
-      return next(new AppError("Token is invalid or has expired!", 400));
+      res.status(400).json({
+        status: "fail",
+        data: {
+          user,
+        },
+      });
+
+      return;
     }
 
     const newUser = await db.user.update({
