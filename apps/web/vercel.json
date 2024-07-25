@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/edgestore",
+      "destination": "https://casecobra-9aol.onrender.com/api/v1/edgestore"
+    }
+  ]
+}
