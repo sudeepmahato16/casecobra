@@ -51,23 +51,17 @@ const createEmailVerificationToken = () => {
 };
 
 export const checkEmailVerificationToken = async (token: string) => {
-  try {
-    const hashToken = createHashToken(token);
-    const user = await db.user.findFirst({
-      where: {
-        verificationToken: hashToken,
-        verificationTokenExpiresIn: {
-          gt: new Date(Date.now()),
-        },
+  const hashToken = createHashToken(token);
+  const user = await db.user.findFirst({
+    where: {
+      verificationToken: hashToken,
+      verificationTokenExpiresIn: {
+        gt: new Date(Date.now()),
       },
-    });
+    },
+  });
 
-    if (!user) throw new Error("Token is invalid or has expired");
-
-    return user;
-  } catch (error: any) {
-    throw new Error(error.message);
-  }
+  return user;
 };
 
 export const signUp = catchAsync(async (req, res, next) => {
@@ -152,6 +146,10 @@ export const verifyUser = catchAsync(async (req, res, next) => {
 
   try {
     const user = await checkEmailVerificationToken(token);
+
+    if (!user) {
+      return next(new AppError("Token is invalid or has expired!", 400));
+    }
 
     const newUser = await db.user.update({
       where: {
