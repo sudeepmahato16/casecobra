@@ -1,4 +1,3 @@
-import { Response } from "express";
 import * as bcrypt from "bcrypt";
 import crypto from "crypto";
 import { ObjectId } from "bson";
@@ -154,7 +153,7 @@ export const verifyUser = catchAsync(async (req, res, next) => {
   try {
     const user = await checkEmailVerificationToken(token);
 
-    await db.user.update({
+    const newUser = await db.user.update({
       where: {
         id: user.id,
       },
@@ -165,10 +164,13 @@ export const verifyUser = catchAsync(async (req, res, next) => {
       },
     });
 
+    console.log(newUser, CLIENT_URL);
+
     new AuthManager(res)
       .createTokenAndCookie(user.id)
       .redirect(`${CLIENT_URL}/auth-callback`);
   } catch (error: any) {
+    console.log("user verfication error!", error);
     next(new AppError(error.message, 400));
   }
 });
@@ -263,8 +265,6 @@ export const googleOauthHandler = catchAsync(async (req, res, next) => {
         isVerified: true,
       },
     });
-
-    console.log(CLIENT_URL);
 
     new AuthManager(res)
       .createTokenAndCookie(user.id)

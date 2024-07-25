@@ -7,7 +7,9 @@ import Redirect from "./Redirect";
 const AuthCallBackPage = async () => {
   const user = await getCurrentUser();
 
-  if (!user) return redirect("/signin");
+  console.log("Auth callback", user);
+
+  if (!user?.user) return redirect("/signin");
 
   return (
     <Redirect>
