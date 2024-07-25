@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import axios from "@/utils/axios";
+import axios from "@/lib/axios";
 import {
   CaseColor,
   CaseFinish,

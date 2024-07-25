@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import axios from "@/utils/axios";
+import axios from "@/lib/axios";
 import { SignInFormData, SignUpFormData } from "@/types";
 
 export const getAccessTokenFromCookie = async () => {

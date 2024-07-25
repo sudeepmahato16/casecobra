@@ -7,6 +7,7 @@ import {
   REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRES_IN,
   COOKIE_EXPIRES_IN,
+  NODE_ENV,
 } from "@/config";
 
 export default class AuthManager {
@@ -36,6 +37,7 @@ export default class AuthManager {
       expires: new Date(
         Date.now() + Number(COOKIE_EXPIRES_IN) * 24 * 60 * 1000
       ),
+      secure: NODE_ENV === "production" ? true : false,
     };
 
     this.res.cookie("casecobra-access-token", accessToken, cookieOptions);

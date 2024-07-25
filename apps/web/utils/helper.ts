@@ -52,5 +52,6 @@ export function constructMetadata({
       creator: "Sudeep Mahato",
     },
     icons,
+    metadataBase: new URL("https://iphonecase.vercel.app/"),
   };
 }

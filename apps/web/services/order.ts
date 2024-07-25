@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import axios from "@/utils/axios";
+import axios from "@/lib/axios";
 import { getAccessTokenFromCookie } from "./auth";
 import { Order, OrderStatus, ServerActionError } from "@/types";
 

@@ -1,7 +1,11 @@
 "use client";
 import React, { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
-import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
+import {
+  Image as ImageIcon,
+  Loader2,
+  MousePointerSquareDashed,
+} from "lucide-react";
 import { cn, Progress, toast } from "@casecobra/ui";
 import { useUploadImage } from "@/hooks/useUploadImage";
 import { createConfiguration } from "@/services/configure";
@@ -67,7 +71,7 @@ const UploadImage = () => {
               ) : isUploading || isPending ? (
                 <Loader2 className="animate-spin h-6 w-6 text-zinc-500 mb-2" />
               ) : (
-                <Image className="xl:h-14 h-10  xl:w-14 w-10  text-zinc-500 mb-2" />
+                <ImageIcon className="xl:h-14 h-10  xl:w-14 w-10  text-zinc-500 mb-2" />
               )}
 
               <div className="flex flex-col items-center gap-1 justify-center mb-2 text-sm xl:text-lg lg:text-base text-zinc-700">

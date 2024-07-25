@@ -11,6 +11,7 @@ import globalErrorHandler from "./controller/errorController";
 import { webHooksCheckout } from "./controller/orderController";
 import { initEdgeStore } from "./services/edgestore";
 import AppError from "./utils/appError";
+import { CLIENT_URL } from "./config";
 
 declare global {
   namespace Express {
@@ -27,7 +28,7 @@ const app: Express = express();
 app.use(
   cors({
     credentials: true,
-    origin: "*",
+    origin: [CLIENT_URL || "http://localhost:3000"],
   })
 );
 

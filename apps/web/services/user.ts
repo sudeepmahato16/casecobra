@@ -1,5 +1,5 @@
 "use server";
-import axios from "@/utils/axios";
+import axios from "@/lib/axios";
 import { getAccessTokenFromCookie } from "./auth";
 
 export const getCurrentUser = async (): Promise<{
