@@ -26,9 +26,6 @@ importers:
 
   apps/api:
     dependencies:
-      '@edgestore/server':
-        specifier: ^0.2.0
-        version: 0.2.0(@aws-sdk/client-s3@3.616.0)(@aws-sdk/s3-request-presigner@3.616.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)(zod@3.23.8)
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -178,6 +175,9 @@ importers:
       '@edgestore/react':
         specifier: ^0.2.0
         version: 0.2.0(next@14.2.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(zod@3.23.8)
+      '@edgestore/server':
+        specifier: ^0.2.1
+        version: 0.2.1(@aws-sdk/client-s3@3.616.0)(@aws-sdk/s3-request-presigner@3.616.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(zod@3.23.8)
       '@headlessui/react':
         specifier: ^2.1.2
         version: 2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -651,8 +651,8 @@ packages:
       react-dom: '>=16.8.0'
       zod: '>=3.0.0'
 
-  '@edgestore/server@0.2.0':
-    resolution: {integrity: sha512-bF9DbC21crJ9ZwcBAvXVv65Znhy0hYWMGE+yeSdaqkCl/Fqn/Rxfk+GB8xsemNxkGc/vk2wyBKCnNTKAgXn0Og==}
+  '@edgestore/server@0.2.1':
+    resolution: {integrity: sha512-ByEB3mulj6UTcqV44E+Cw5C02cpKEl1OaigsyT2dt5U8IqQSWX6U3MBoPnWVaqJ1XadQ+Gc/JZDN40tEIuwnNg==}
     peerDependencies:
       '@aws-sdk/client-s3': '>=3.0.0'
       '@aws-sdk/s3-request-presigner': '>=3.0.0'
@@ -670,6 +670,16 @@ packages:
 
   '@edgestore/shared@0.2.0':
     resolution: {integrity: sha512-8VW/DQ8qV4aZz7miXB5ulN6SyMdVMSTqffviMmCgm+NM2ttSBoZK/qZud1WB2YM6f57xKAraF7BvnX0pEetjTQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+      zod: '>=3.0.0'
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
+  '@edgestore/shared@0.2.1':
+    resolution: {integrity: sha512-aS2DHfz02RVmXqNjMtaYb5vstT3so3Ofj17nTrbQKZwq19CC3shFSCS9lGaCtJz8Bbiem2p1nBLJgjGRYhsfZA==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -5373,9 +5383,9 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@edgestore/server@0.2.0(@aws-sdk/client-s3@3.616.0)(@aws-sdk/s3-request-presigner@3.616.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)(zod@3.23.8)':
+  '@edgestore/server@0.2.1(@aws-sdk/client-s3@3.616.0)(@aws-sdk/s3-request-presigner@3.616.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(zod@3.23.8)':
     dependencies:
-      '@edgestore/shared': 0.2.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)(zod@3.23.8)
+      '@edgestore/shared': 0.2.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(zod@3.23.8)
       '@panva/hkdf': 1.2.1
       cookie: 0.5.0
       jose: 4.15.9
@@ -5395,10 +5405,10 @@ snapshots:
     optionalDependencies:
       zod: 3.23.8
 
-  '@edgestore/shared@0.2.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)(zod@3.23.8)':
+  '@edgestore/shared@0.2.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(zod@3.23.8)':
     dependencies:
-      react: 19.0.0-rc-f994737d14-20240522
-      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     optionalDependencies:
       zod: 3.23.8
 

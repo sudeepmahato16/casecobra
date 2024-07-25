@@ -7,7 +7,7 @@ const NotFound = () => {
   return (
     <div className="h-screen flex items-center justify-center">
       <div className="flex flex-col gap-20 items-center">
-        <Image src="not-found.svg" width={480} height={320} alt="not-found" />
+        <Image src="/not-found.svg" width={480} height={320} alt="not-found" />
 
         <div className="text-center">
           <h3 className="sm:text-2xl xs:text-xl text-lg dark:text-gray-50 text-gray-900 font-medium">

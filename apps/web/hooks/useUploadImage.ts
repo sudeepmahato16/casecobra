@@ -8,7 +8,6 @@ export const useUploadImage = () => {
 
   const startUpload = async (file: File) => {
     setIsUploading(true);
-    // @ts-ignore
     const res = await edgestore.publicFiles.upload({
       file,
       onProgressChange: (progress) => {

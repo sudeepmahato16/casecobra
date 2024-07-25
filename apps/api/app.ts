@@ -9,7 +9,6 @@ import { orderRouter } from "./routes/orderRouter";
 
 import globalErrorHandler from "./controller/errorController";
 import { webHooksCheckout } from "./controller/orderController";
-import { initEdgeStore } from "./services/edgestore";
 import AppError from "./utils/appError";
 import { CLIENT_URL } from "./config";
 
@@ -58,8 +57,6 @@ app.use(cookieParser());
 app.get("/", (req, res, next) => {
   res.send("hello!");
 });
-
-initEdgeStore(app);
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);

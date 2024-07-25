@@ -11,6 +11,7 @@
   "dependencies": {
     "@casecobra/ui": "workspace:*",
     "@edgestore/react": "^0.2.0",
+    "@edgestore/server": "^0.2.1",
     "@headlessui/react": "^2.1.2",
     "@hookform/resolvers": "^3.9.0",
     "axios": "^1.7.2",
