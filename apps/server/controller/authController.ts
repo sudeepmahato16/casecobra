@@ -173,7 +173,7 @@ export const verifyUser = catchAsync(async (req, res, next) => {
 
     console.log(newUser, CLIENT_URL);
 
-    new AuthManager(res)
+    return new AuthManager(res)
       .createTokenAndCookie(user.id)
       .redirect(`${CLIENT_URL}/auth-callback`);
   } catch (error: any) {

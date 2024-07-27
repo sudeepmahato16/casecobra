@@ -59,6 +59,6 @@ export default class AuthManager {
   }
 
   redirect(url: string) {
-    this.res.redirect(url);
+    return this.res.redirect(url);
   }
 }
