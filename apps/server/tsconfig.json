@@ -4,10 +4,15 @@
     "baseUrl": ".",
     "declaration": false,
     "declarationMap": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2020",
+    "sourceMap": true,
     "paths": {
       "@/*": ["./*"]
     },
     "outDir": "./build"
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }

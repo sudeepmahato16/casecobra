@@ -1,5 +1,6 @@
 import Stripe from "stripe";
-import { db, Order } from "@casecobra/db";
+import { Order } from "@casecobra/db";
+import { db } from "@/app";
 import {
   ADMIN_EMAIL,
   BASE_PRICE,

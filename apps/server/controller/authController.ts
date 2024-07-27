@@ -3,7 +3,7 @@ import crypto from "crypto";
 import { ObjectId } from "bson";
 import qs from "qs";
 
-import { db } from "@casecobra/db";
+import { db } from "@/app";
 import Email from "@/services/email";
 import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";

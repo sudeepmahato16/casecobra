@@ -1,11 +1,13 @@
 {
-  "name": "api",
+  "name": "server",
   "version": "1.0.0",
   "main": "server.ts",
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "start": "ts-node -r tsconfig-paths/register --transpile-only server.ts"
+    "start": "ts-node -r tsconfig-paths/register --transpile-only app.ts",
+    "vercel-build": "echo Vercel-Build",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

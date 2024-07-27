@@ -1,16 +1,22 @@
 import express, { Express, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { config } from "dotenv";
 
-import { authRouter } from "./routes/authRouter";
-import { userRouter } from "./routes/userRouter";
-import { configurationRouter } from "./routes/configurationRouter";
-import { orderRouter } from "./routes/orderRouter";
+config({
+  path: "./.env",
+});
 
-import globalErrorHandler from "./controller/errorController";
-import { webHooksCheckout } from "./controller/orderController";
-import AppError from "./utils/appError";
-import { CLIENT_URL } from "./config";
+import { authRouter } from "@/routes/authRouter";
+import { userRouter } from "@/routes/userRouter";
+import { configurationRouter } from "@/routes/configurationRouter";
+import { orderRouter } from "@/routes/orderRouter";
+
+import globalErrorHandler from "@/controller/errorController";
+import { webHooksCheckout } from "@/controller/orderController";
+import AppError from "@/utils/appError";
+import { CLIENT_URL, PORT } from "@/config";
+import { PrismaClient } from "@casecobra/db";
 
 declare global {
   namespace Express {
@@ -23,6 +29,8 @@ declare global {
 }
 
 const app: Express = express();
+
+export const db = new PrismaClient();
 
 app.use(
   cors({
@@ -68,5 +76,9 @@ app.all("*", (req, _res, next) => {
 });
 
 app.use(globalErrorHandler);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}....`);
+});
 
 export default app;

@@ -1,6 +1,6 @@
 import AppError from "@/utils/appError";
 import { catchAsync } from "@/utils/catchAsync";
-import { db } from "@casecobra/db";
+import { db } from "@/app";
 
 export const getCurrentUser = catchAsync(async (req, res, next) => {
   const data = req.user;

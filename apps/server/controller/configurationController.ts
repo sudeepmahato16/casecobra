@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { catchAsync } from "@/utils/catchAsync";
 import AppError from "@/utils/appError";
-import { db } from "@casecobra/db";
+import { db } from "@/app";
 
 const validImages = ["jpeg", "png", "jpg"];
 
