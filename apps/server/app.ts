@@ -35,7 +35,7 @@ export const db = new PrismaClient();
 app.use(
   cors({
     credentials: true,
-    origin: [CLIENT_URL || "http://localhost:3000"],
+    origin: CLIENT_URL,
   })
 );
 

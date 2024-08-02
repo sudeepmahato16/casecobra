@@ -59,6 +59,7 @@ export default class AuthManager {
   }
 
   redirect(url: string) {
-    return this.res.status(302).redirect(url);
+    console.log(this.res.getHeaders());
+    this.res.redirect(302, url);
   }
 }
