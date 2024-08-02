@@ -8,6 +8,7 @@ import {
   REFRESH_TOKEN_EXPIRES_IN,
   COOKIE_EXPIRES_IN,
   NODE_ENV,
+  COOKIE_DOMAIN,
 } from "@/config";
 
 export default class AuthManager {
@@ -38,7 +39,7 @@ export default class AuthManager {
         Date.now() + Number(COOKIE_EXPIRES_IN) * 24 * 60 * 1000
       ),
       secure: NODE_ENV === "production",
-      sameSite: "none",
+      domain: COOKIE_DOMAIN,
     };
 
     console.log(cookieOptions);

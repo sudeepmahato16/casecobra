@@ -46,3 +46,4 @@ export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 export const GOOGLE_OAUTH_REDIRECT_URL = process.env.GOOGLE_OATUTH_REDIRECT_URL;
 
 export const NODE_ENV = process.env.NODE_ENV;
+export const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;
