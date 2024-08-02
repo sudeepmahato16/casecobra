@@ -38,7 +38,10 @@ export default class AuthManager {
         Date.now() + Number(COOKIE_EXPIRES_IN) * 24 * 60 * 1000
       ),
       secure: NODE_ENV === "production",
+      sameSite: "none",
     };
+
+    console.log(cookieOptions);
 
     this.res.cookie("casecobra-access-token", accessToken, cookieOptions);
     this.res.cookie("casecobra-refresh-token", refreshToken, cookieOptions);
