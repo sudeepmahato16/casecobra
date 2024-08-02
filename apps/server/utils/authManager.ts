@@ -37,7 +37,7 @@ export default class AuthManager {
       expires: new Date(
         Date.now() + Number(COOKIE_EXPIRES_IN) * 24 * 60 * 1000
       ),
-      secure: NODE_ENV === "production" ? true : false,
+      secure: NODE_ENV === "production",
     };
 
     this.res.cookie("casecobra-access-token", accessToken, cookieOptions);
@@ -59,6 +59,6 @@ export default class AuthManager {
   }
 
   redirect(url: string) {
-    return this.res.redirect(url);
+    return this.res.status(302).redirect(url);
   }
 }

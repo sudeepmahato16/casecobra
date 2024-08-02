@@ -7,6 +7,7 @@ config({
   path: "./.env",
 });
 
+import { PrismaClient } from "@casecobra/db";
 import { authRouter } from "@/routes/authRouter";
 import { userRouter } from "@/routes/userRouter";
 import { configurationRouter } from "@/routes/configurationRouter";
@@ -16,7 +17,6 @@ import globalErrorHandler from "@/controller/errorController";
 import { webHooksCheckout } from "@/controller/orderController";
 import AppError from "@/utils/appError";
 import { CLIENT_URL, PORT } from "@/config";
-import { PrismaClient } from "@casecobra/db";
 
 declare global {
   namespace Express {

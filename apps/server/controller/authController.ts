@@ -273,7 +273,7 @@ export const googleOauthHandler = catchAsync(async (req, res, next) => {
       },
     });
 
-    new AuthManager(res)
+    return new AuthManager(res)
       .createTokenAndCookie(user.id)
       .redirect(`${CLIENT_URL!}/auth-callback`);
   } catch (error) {
