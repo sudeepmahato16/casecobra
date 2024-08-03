@@ -37,8 +37,9 @@ export default class AuthManager {
       expires: new Date(
         Date.now() + Number(COOKIE_EXPIRES_IN) * 24 * 60 * 1000
       ),
-      secure: NODE_ENV === "production",
+      secure: true,
       sameSite: "none",
+      domain: ".onrender.com",
     };
 
     console.log(cookieOptions);
