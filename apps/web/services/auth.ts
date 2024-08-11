@@ -8,7 +8,6 @@ import { SignInFormData, SignUpFormData } from "@/types";
 
 export const getAccessTokenFromCookie = async () => {
   const accessToken = cookies().get("casecobra-access-token");
-  console.log(cookies().getAll());
   if (!accessToken?.value) return null;
 
   return accessToken.value;
@@ -64,4 +63,36 @@ export const signOut = () => {
   cookie.delete("casecobra-refresh-token");
 
   redirect("/");
+};
+
+export const authorize = async (code: string) => {
+  try {
+    const { data } = await axios.post(
+      `/auth/authorize`,
+      {
+        code,
+        clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    const cookie = cookies();
+
+    cookie.set("casecobra-access-token", data.token.accessToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days
+    });
+
+    cookie.set("casecobra-refresh-token", data.token.refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 days
+    });
+
+    return true;
+  } catch (error: any) {
+    console.log(error);
+    return false;
+  }
 };

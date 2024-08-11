@@ -25,7 +25,7 @@ const ThankYouPage: FC<ThankYouPageProps> = async ({
     );
 
   return (
-    <Suspense>
+    <Suspense fallback={<div>loading...</div>}>
       <ThankYou order={response.data.order} />
     </Suspense>
   );

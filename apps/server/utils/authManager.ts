@@ -12,6 +12,8 @@ import {
 
 export default class AuthManager {
   res: Response;
+  accessToken: string = "";
+  refreshToken: string = "";
 
   constructor(res: Response) {
     this.res = res;
@@ -26,6 +28,9 @@ export default class AuthManager {
       expiresIn: REFRESH_TOKEN_EXPIRES_IN,
     });
 
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+
     return { accessToken, refreshToken };
   }
 
@@ -37,12 +42,8 @@ export default class AuthManager {
       expires: new Date(
         Date.now() + Number(COOKIE_EXPIRES_IN) * 24 * 60 * 1000
       ),
-      secure: true,
-      sameSite: "none",
-      domain: ".onrender.com",
+      secure: NODE_ENV === "production",
     };
-
-    console.log(cookieOptions);
 
     this.res.cookie("casecobra-access-token", accessToken, cookieOptions);
     this.res.cookie("casecobra-refresh-token", refreshToken, cookieOptions);
@@ -52,18 +53,21 @@ export default class AuthManager {
 
   sendResponse(
     statusCode: number,
-    user: { id: string; name: string | null; email: string }
+    user: {
+      id: string;
+      name: string | null;
+      email: string;
+    }
   ) {
     this.res.status(statusCode).json({
       status: "success",
+      token: {
+        accessToken: this.accessToken,
+        refreshToken: this.refreshToken,
+      },
       data: {
         user,
       },
     });
-  }
-
-  redirect(url: string) {
-    console.log(this.res.getHeaders());
-    this.res.redirect(302, url);
   }
 }

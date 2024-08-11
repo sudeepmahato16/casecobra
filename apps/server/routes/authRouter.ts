@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
+  authorize,
   googleOauthHandler,
   signIn,
   signOut,
   signUp,
-  verifyUser,
 } from "@/controller/authController";
 import schemaValidator from "@/middleware/schemaValidator";
 
@@ -15,6 +15,6 @@ authRouter.post("/signin", schemaValidator("signin"), signIn);
 authRouter.get("/oauth/google", googleOauthHandler);
 authRouter.get("/signout", signOut);
 
-authRouter.get("/verify", verifyUser);
+authRouter.post("/authorize", authorize);
 
 export { authRouter };

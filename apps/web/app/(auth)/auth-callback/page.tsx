@@ -1,18 +1,24 @@
+import { FC } from "react";
 import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-import { getCurrentUser } from "@/services/user";
 import Redirect from "./Redirect";
+import { getCurrentUser } from "@/services/user";
 
-const AuthCallBackPage = async () => {
+interface AuthCallBackPageProps {
+  searchParams: {
+    [x: string]: string | string[] | undefined;
+  };
+}
+
+const AuthCallBackPage: FC<AuthCallBackPageProps> = async ({
+  searchParams: { code },
+}) => {
   const user = await getCurrentUser();
-
-  console.log("Auth callback", user);
-
-  if (!user?.user) return redirect("/signin");
+  if (!user?.user && !code) return redirect("/signin");
 
   return (
-    <Redirect>
+    <Redirect code={code}>
       <div className="w-full flex justify-center">
         <div className="flex flex-col items-center gap-2">
           <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />

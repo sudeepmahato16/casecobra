@@ -40,7 +40,7 @@ const createHashToken = (token: string) => {
   return crypto.createHash("sha256").update(token).digest("hex");
 };
 
-const createEmailVerificationToken = () => {
+const createVerificationToken = () => {
   const token = crypto.randomBytes(32).toString("hex");
   const hashToken = createHashToken(token);
 
@@ -50,7 +50,7 @@ const createEmailVerificationToken = () => {
   };
 };
 
-export const checkEmailVerificationToken = async (token: string) => {
+export const checkVerificationToken = async (token: string) => {
   const hashToken = createHashToken(token);
   const user = await db.user.findFirst({
     where: {
@@ -80,7 +80,7 @@ export const signUp = catchAsync(async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { token, hashToken } = createEmailVerificationToken();
+    const { token, hashToken } = createVerificationToken();
 
     const verificationTokenExpiresIn = new Date(
       Date.now() + Number(EMAIL_ACTIVATION_TOKEN_EXPIRES_IN)
@@ -97,7 +97,7 @@ export const signUp = catchAsync(async (req, res, next) => {
       },
     });
 
-    const url = `${req.protocol}://${req.get("host")}/api/v1/auth/verify?token=${token}`;
+    const url = `${CLIENT_URL}/auth-callback?code=${token}`;
 
     await new Email({
       user: { email, name },
@@ -136,50 +136,6 @@ export const signIn = catchAsync(async (req, res, next) => {
   new AuthManager(res)
     .createTokenAndCookie(user.id)
     .sendResponse(200, { id: user.id, email: user.email, name: user.name });
-});
-
-export const verifyUser = catchAsync(async (req, res, next) => {
-  const { token } = req.query;
-
-  if (!token || typeof token !== "string")
-    return next(new AppError("token not found!", 404));
-
-  try {
-    const user = await checkEmailVerificationToken(token);
-
-    console.log("user", user);
-
-    if (!user) {
-      res.status(400).json({
-        status: "fail",
-        data: {
-          user,
-        },
-      });
-
-      return;
-    }
-
-    const newUser = await db.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        isVerified: true,
-        verificationToken: null,
-        verificationTokenExpiresIn: null,
-      },
-    });
-
-    console.log(newUser, CLIENT_URL);
-
-    return new AuthManager(res)
-      .createTokenAndCookie(user.id)
-      .redirect(`${CLIENT_URL}/auth-callback`);
-  } catch (error: any) {
-    console.log("user verfication error!", error);
-    next(new AppError(error.message, 400));
-  }
 });
 
 export const signOut = catchAsync(async (req, res, next) => {
@@ -259,24 +215,64 @@ export const googleOauthHandler = catchAsync(async (req, res, next) => {
       return res.status(403).send("Google account is not verified");
     }
 
-    const user = await db.user.upsert({
+    const { hashToken, token } = createVerificationToken();
+    const verificationTokenExpiresIn = new Date(
+      Date.now() + 24 * 60 * 60 * 1000
+    );
+
+    await db.user.upsert({
       where: {
         email: googleUser.email,
       },
       update: {
         name: googleUser.name,
+        verificationToken: hashToken,
+        verificationTokenExpiresIn,
       },
       create: {
         email: googleUser.email,
         name: googleUser.name,
         isVerified: true,
+        verificationToken: hashToken,
+        verificationTokenExpiresIn,
       },
     });
 
-    return new AuthManager(res)
-      .createTokenAndCookie(user.id)
-      .redirect(`${CLIENT_URL!}/auth-callback`);
+    res.redirect(`${CLIENT_URL!}/auth-callback?code=${token}`);
   } catch (error) {
     res.redirect(`${CLIENT_URL!}`);
   }
+});
+
+export const authorize = catchAsync(async (req, res, next) => {
+  const { clientId, code } = req.body;
+
+  if (clientId !== GOOGLE_CLIENT_ID)
+    return next(new AppError("invalid client id", 401));
+
+  const user = await checkVerificationToken(code);
+
+  if (!user) {
+    res.status(400).json({
+      status: "fail",
+      message: "invalid code",
+    });
+
+    return;
+  }
+
+  await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      isVerified: true,
+      verificationToken: null,
+      verificationTokenExpiresIn: null,
+    },
+  });
+
+  new AuthManager(res)
+    .createTokenAndCookie(user.id)
+    .sendResponse(200, { id: user.id, name: user.name, email: user.email });
 });
