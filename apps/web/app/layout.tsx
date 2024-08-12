@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
 import { Recursive } from "next/font/google";
 import { Toaster } from "@casecobra/ui";
 import { constructMetadata } from "@/utils/helper";
@@ -30,6 +31,8 @@ export default function RootLayout({
             },
           }}
         />
+
+        <NextTopLoader showSpinner={false} color="#2b9b50" height={2} />
       </body>
     </html>
   );
