@@ -11,7 +11,7 @@ const Logo: FC<LogoProps> = ({ className }) => {
     <Link
       href="/"
       className={cn(
-        "flex z-40 font-semibold lg:text-2xl md:text-xl text-lg",
+        "flex z-40 font-semibold 2xl:text-[22px] md:text-xl text-lg",
         className
       )}
     >

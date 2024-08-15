@@ -27,7 +27,8 @@ const Hero = () => {
                   width="0"
                   height="0"
                   sizes="100vw"
-                  className="w-16 h-auto"
+                  className="w-16 h-[84px]"
+                  priority
                 />
               </div>
               <h1 className="relative w-fit tracking-tight text-balance mt-16 font-bold !leading-tight text-gray-900 md:text-5xl text-3xl ">
