@@ -25,7 +25,7 @@ const format = winston.format.combine(
   timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
   colorize({ all: true }),
   printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.stack || info.message}}`
+    (info) => `${info.timestamp} ${info.level}: ${info.stack || info.message}`
   )
 );
 
