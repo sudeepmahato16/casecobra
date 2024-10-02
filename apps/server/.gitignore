@@ -1,2 +1,5 @@
 .vercel
 build
+
+logs
+*.log

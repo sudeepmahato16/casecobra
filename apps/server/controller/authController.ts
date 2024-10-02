@@ -16,6 +16,7 @@ import {
   GOOGLE_OAUTH_REDIRECT_URL,
 } from "@/config";
 import axios from "axios";
+import { logger } from "@/utils/logger";
 
 interface GoogleTokensResult {
   access_token: string;
@@ -107,8 +108,8 @@ export const signUp = catchAsync(async (req, res, next) => {
       status: "success",
       message: "Please verified your email address",
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    logger.error(error.message);
     next(new AppError("Failed to create account", 500));
   }
 });

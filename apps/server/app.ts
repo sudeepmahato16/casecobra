@@ -17,6 +17,8 @@ import globalErrorHandler from "@/controller/errorController";
 import { webHooksCheckout } from "@/controller/orderController";
 import AppError from "@/utils/appError";
 import { CLIENT_URL, PORT } from "@/config";
+import { logger } from "@/utils/logger";
+import { morganMiddleware } from "./middleware/morgan";
 
 declare global {
   namespace Express {
@@ -31,6 +33,8 @@ declare global {
 const app: Express = express();
 
 export const db = new PrismaClient();
+
+app.use(morganMiddleware);
 
 app.use(
   cors({
@@ -78,7 +82,7 @@ app.all("*", (req, _res, next) => {
 app.use(globalErrorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}....`);
+  logger.info(`Server is running on port ${PORT}....`);
 });
 
 export default app;
