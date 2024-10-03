@@ -24,9 +24,7 @@ const format = winston.format.combine(
   errors({ stack: true }),
   timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
   colorize({ all: true }),
-  printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.stack || info.message}`
-  )
+  printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
 );
 
 const transports = [

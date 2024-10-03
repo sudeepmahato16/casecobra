@@ -34,7 +34,7 @@ const globalErrorHandler = async (
   err.status = err.status || "error";
   err.statusCode = err.statusCode || 500;
 
-  logger.error(err.message, err);
+  logger.error(err.message);
 
   if (process.env.NODE_ENV === "production") {
     sendErrorProd(err, req, res);

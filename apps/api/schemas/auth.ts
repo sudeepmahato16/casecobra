@@ -15,6 +15,13 @@ const authSignup = Joi.object().keys({
   }),
 });
 
+const refreshToken = Joi.object().keys({
+  refreshToken: Joi.string().required().messages({
+    "any.required": "please provide your refresh token!",
+    "string.empty": "please provide your refresh token!",
+  }),
+});
+
 const authSignin = Joi.object().keys({
   email: Joi.string().required(),
   password: Joi.string().required(),
@@ -23,4 +30,5 @@ const authSignin = Joi.object().keys({
 export const authSchema = {
   signin: authSignin,
   signup: authSignup,
+  refreshToken: refreshToken,
 };

@@ -6,11 +6,21 @@ import { revalidatePath } from "next/cache";
 import axios from "@/lib/axios";
 import { SignInFormData, SignUpFormData } from "@/types";
 
-export const getAccessTokenFromCookie = async () => {
-  const accessToken = cookies().get("casecobra-access-token");
+const getTokenFromCookie = async (name: string) => {
+  const accessToken = cookies().get(name);
   if (!accessToken?.value) return null;
 
   return accessToken.value;
+};
+
+export const getAccessTokenFromCookie = async () => {
+  const token = await getTokenFromCookie("casecobra-access-token");
+  return token;
+};
+
+export const getRefreshTokenFromCookie = async () => {
+  const token = await getTokenFromCookie("casecobra-refresh-token");
+  return token;
 };
 
 export const signUp = async (formData: SignUpFormData) => {

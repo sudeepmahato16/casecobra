@@ -12,6 +12,7 @@ export default {
 export type SchemaName =
   | "signin"
   | "signup"
+  | "refreshToken"
   | "createConfiguration"
   | "updateConfiguration"
   | "updateOrder";

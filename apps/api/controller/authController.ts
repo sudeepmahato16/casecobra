@@ -2,6 +2,7 @@ import * as bcrypt from "bcrypt";
 import crypto from "crypto";
 import { ObjectId } from "bson";
 import qs from "qs";
+import jwt from "jsonwebtoken";
 
 import { db } from "@/app";
 import Email from "@/services/email";
@@ -14,6 +15,7 @@ import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   GOOGLE_OAUTH_REDIRECT_URL,
+  REFRESH_TOKEN_SECRET,
 } from "@/config";
 import axios from "axios";
 import { logger } from "@/utils/logger";
@@ -63,6 +65,10 @@ export const checkVerificationToken = async (token: string) => {
   });
 
   return user;
+};
+
+export const verifyToken = (token: string, secret: string) => {
+  return jwt.verify(token, secret) as { id: string };
 };
 
 export const signUp = catchAsync(async (req, res, next) => {
@@ -276,4 +282,34 @@ export const authorize = catchAsync(async (req, res, next) => {
   new AuthManager(res)
     .createTokenAndCookie(user.id)
     .sendResponse(200, { id: user.id, name: user.name, email: user.email });
+});
+
+export const refreshToken = catchAsync(async (req, res, next) => {
+  try {
+    const { refreshToken: token } = req.body;
+
+    if (!token) return next(new AppError("Please provide refresh token", 404));
+
+    const data = verifyToken(token, REFRESH_TOKEN_SECRET!);
+
+    if (!data.id) {
+      return next(new AppError("Token is invalid or has expired", 400));
+    }
+
+    const user = await db.user.findUnique({
+      where: {
+        id: data.id,
+      },
+    });
+
+    if (!user) {
+      return next(new AppError("User not found!", 404));
+    }
+
+    new AuthManager(res)
+      .createTokenAndCookie(user.id)
+      .sendResponse(200, { id: user.id, email: user.email, name: user.name });
+  } catch (error: any) {
+    next(new AppError("Token is invalid or has expired", 400));
+  }
 });

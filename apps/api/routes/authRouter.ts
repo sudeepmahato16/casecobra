@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   authorize,
   googleOauthHandler,
+  refreshToken,
   signIn,
   signOut,
   signUp,
@@ -16,5 +17,10 @@ authRouter.get("/oauth/google", googleOauthHandler);
 authRouter.get("/signout", signOut);
 
 authRouter.post("/authorize", authorize);
+authRouter.post(
+  "/refresh-token",
+  schemaValidator("refreshToken"),
+  refreshToken
+);
 
 export { authRouter };

@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import AppError from "@/utils/appError";
+import { verifyToken } from "@/controller/authController";
 import { ACCESS_TOKEN_SECRET } from "@/config";
-
-const verifyToken = (token: string) => {
-  return jwt.verify(token, ACCESS_TOKEN_SECRET!) as { id: string };
-};
 
 export const isAuthenticated = async (
   req: Request,
@@ -29,7 +25,7 @@ export const isAuthenticated = async (
     );
 
   try {
-    const data = verifyToken(token);
+    const data = verifyToken(token, ACCESS_TOKEN_SECRET!);
 
     if (!data.id) {
       return next(
