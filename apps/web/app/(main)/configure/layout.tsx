@@ -6,7 +6,7 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <EdgeStoreProvider>
-      <MaxWidthWrapper className="flex-1 flex flex-col">
+      <MaxWidthWrapper>
         <Steps />
         {children}
       </MaxWidthWrapper>

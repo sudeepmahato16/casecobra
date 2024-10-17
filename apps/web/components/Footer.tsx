@@ -4,11 +4,10 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 
 const Footer = () => {
   return (
-    <footer className="bg-white md:h-16 h-14 relative">
+    <footer className="bg-white">
+      <div className="border-t border-gray-200" />
       <MaxWidthWrapper>
-        <div className="border-t border-gray-200" />
-
-        <div className="h-full flex flex-row md:justify-between justify-center items-center">
+        <div className="md:py-5 py-3.5 flex flex-row md:justify-between justify-center items-center">
           <div className="text-center md:text-left">
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} All rights reserved

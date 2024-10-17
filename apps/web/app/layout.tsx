@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { Recursive } from "next/font/google";
-import { Toaster } from "@casecobra/ui";
+import { cn, Toaster } from "@casecobra/ui";
 import { constructMetadata } from "@/utils/helper";
 import "./globals.css";
 
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={recursive.className}>
+      <body className={cn(recursive.className)}>
         {children}
         <Toaster
           richColors

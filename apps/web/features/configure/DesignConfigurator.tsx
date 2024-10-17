@@ -1,5 +1,11 @@
 "use client";
-import React, { FC, useRef, useState, useTransition } from "react";
+import React, {
+  FC,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { useRouter } from "next/navigation";
 
 import ImageAdjuster from "./ImageAdjuster";
@@ -66,6 +72,12 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
 
   const { startUpload } = useUploadImage();
 
+  useLayoutEffect(() => {
+    if (typeof window !== undefined) {
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
   const onContinue = () => {
     startTransition(async () => {
       try {
@@ -130,27 +142,29 @@ const DesignConfigurator: FC<DesignConfiguratorProps> = ({
   };
 
   return (
-    <div className="relative mt-12 grid grid-cols-1 lg:grid-cols-3 mb-16 pb-16">
-      <div
-        ref={containerRef}
-        className="relative h-[37.5rem] overflow-hidden col-span-2 w-full max-w-4xl flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-      >
-        <ImageAdjuster
-          color={`bg-${options.color.tw}`}
-          imageUrl={imageUrl}
-          ref={phoneCaseRef}
-          renderedPosition={renderedPosition}
-          setRenderedPosition={setRenderedPosition}
-          renderedDimensions={renderedDimensions}
-          setRenderedDimensions={setRenderedDimensions}
+    <div className="pb-16 pt-12">
+      <div className="relative grid grid-cols-1 lg:grid-cols-3">
+        <div
+          ref={containerRef}
+          className="relative h-[37.5rem] overflow-hidden col-span-2 w-full max-w-4xl flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
+          <ImageAdjuster
+            color={`bg-${options.color.tw}`}
+            imageUrl={imageUrl}
+            ref={phoneCaseRef}
+            renderedPosition={renderedPosition}
+            setRenderedPosition={setRenderedPosition}
+            renderedDimensions={renderedDimensions}
+            setRenderedDimensions={setRenderedDimensions}
+          />
+        </div>
+        <CaseCustomizationOptions
+          options={options}
+          setOptions={setOptions}
+          onContinue={onContinue}
+          isLoading={isLoading}
         />
       </div>
-      <CaseCustomizationOptions
-        options={options}
-        setOptions={setOptions}
-        onContinue={onContinue}
-        isLoading={isLoading}
-      />
     </div>
   );
 };

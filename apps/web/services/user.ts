@@ -16,6 +16,8 @@ export const getCurrentUser = async (): Promise<{
   try {
     const accessToken = await getAccessTokenFromCookie();
 
+    if (!accessToken) return null;
+
     const { data } = await axios.get("/users/current-user", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
