@@ -22,6 +22,8 @@ export const EDGE_STORE_SECRET_KEY = process.env.EDGE_STORE_SECRET_KEY;
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 export const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
+export const REDIS_URL = process.env.REDIS_URL;
+
 export const CLIENT_URL = process.env.CLIENT_URL;
 
 export const STRIPE_WEBHOOKS_SECRET = process.env.STRIPE_WEBHOOKS_SECRET;
