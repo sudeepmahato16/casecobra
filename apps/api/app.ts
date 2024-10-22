@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { config } from "dotenv";
 import { rateLimit } from "express-rate-limit";
+import compression from "compression";
 
 config({
   path: "./.env",
@@ -74,6 +75,8 @@ app.use(
 );
 
 app.use(cookieParser());
+
+app.use(compression());
 
 app.get("/", (req, res, next) => {
   res.send("hello!");
