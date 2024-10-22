@@ -4,6 +4,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import { rateLimit } from "express-rate-limit";
 import compression from "compression";
+import helmet from "helmet";
 
 config({
   path: "./.env",
@@ -36,6 +37,7 @@ const app: Express = express();
 
 export const db = new PrismaClient();
 
+app.use(helmet());
 app.use(morganMiddleware);
 
 app.use(
