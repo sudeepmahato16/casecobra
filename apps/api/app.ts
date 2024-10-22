@@ -2,6 +2,7 @@ import express, { Express, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { config } from "dotenv";
+import { rateLimit } from "express-rate-limit";
 
 config({
   path: "./.env",
@@ -44,6 +45,14 @@ app.use(
 );
 
 app.options("*", cors());
+
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 15 * 60 * 1000,
+  message: "Too many requests from this IP, please try again in an hour!",
+});
+
+app.use("/api", limiter);
 
 app.post(
   "/webhooks/stripe",
